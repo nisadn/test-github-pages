@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: master
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
