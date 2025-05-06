@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-node@v4.0.1
         with:
           # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-          node-version-file: .nvmrc
+          node-version: 21
           cache: 'yarn'
       
       - name: Run install
