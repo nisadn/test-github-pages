@@ -14,10 +14,10 @@ jobs:
           ref: master
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.1
+        uses: actions/setup-node@v4
         with:
           # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-          node-version: 21
+          node-version: 21.5.0
           cache: 'yarn'
       
       - name: Run install
