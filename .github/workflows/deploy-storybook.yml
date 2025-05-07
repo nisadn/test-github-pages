@@ -2,14 +2,30 @@ name: Deploy Storybook
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy from'
+        required: true
+        default: 'master'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Validate branch input
+        id: validate-branch
+        run: |
+          ALLOWED_BRANCHES=("master" "test-deploy")
+          if [[ ! " ${ALLOWED_BRANCHES[@]} " =~ " ${INPUT_BRANCH} " ]]; then
+            echo "Error: The branch '${INPUT_BRANCH}' is not allowed."
+            exit 1
+          fi
+        env:
+          INPUT_BRANCH: ${{ inputs.branch }}
+
       - uses: actions/checkout@v4
         with:
-          ref: master
+          ref: ${{ inputs.branch }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
