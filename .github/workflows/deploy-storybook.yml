@@ -7,20 +7,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate branch
-        id: validate-branch
-        run: |
-          ALLOWED_BRANCHES=("refs/heads/master" "refs/heads/test-deploy")
-          if [[ ! " ${ALLOWED_BRANCHES[@]} " =~ " ${GITHUB_REF} " ]]; then
-            echo "Error: The branch '${GITHUB_REF}' is not allowed for deployment."
-            exit 1
-          fi
-        env:
-          GITHUB_REF: ${{ github.ref }}
-
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: master
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
