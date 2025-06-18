@@ -1,12 +1,16 @@
 name: Deploy Storybook
 
 on:
-  workflow_dispatch:
-    inputs: 
-      checkout_branch:
-        description: 'Branch to deploy'
-        required: true
-        default: 'master'
+  push:
+    tags: # Trigger workflow on tag creation
+      - '*'
+
+  # workflow_dispatch:
+  #   inputs: 
+  #     checkout_branch:
+  #       description: 'Branch to deploy'
+  #       required: true
+  #       default: 'master'
 
 jobs:
   build:
@@ -14,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.checkout_branch }}
+          ref: ${{ github.ref }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
