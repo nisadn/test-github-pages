@@ -2,8 +2,8 @@ name: Deploy Storybook
 
 on:
   push:
-    tags: # Trigger workflow on tag creation
-      - '*'
+    branches:
+      - master
 
   # workflow_dispatch:
   #   inputs: 
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: gh-pages
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
