@@ -1,16 +1,8 @@
 name: Deploy Storybook
 
 on:
-  push:
-    branches:
-      - master
-
-  # workflow_dispatch:
-  #   inputs: 
-  #     checkout_branch:
-  #       description: 'Branch to deploy'
-  #       required: true
-  #       default: 'master'
+  repository_dispatch:
+    types: trigger-deploy
 
 jobs:
   build:
