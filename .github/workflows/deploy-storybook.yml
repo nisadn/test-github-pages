@@ -1,20 +1,24 @@
 name: Deploy Storybook
 
 on:
-  workflow_run:
-    workflows:
-      - Publish Workflow
-    types:
-      - completed
+  push:
+    branches:
+      - master
+
+  # workflow_dispatch:
+  #   inputs: 
+  #     checkout_branch:
+  #       description: 'Branch to deploy'
+  #       required: true
+  #       default: 'master'
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: master
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
