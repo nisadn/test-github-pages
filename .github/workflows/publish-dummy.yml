@@ -1,0 +1,19 @@
+name: Publish Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run publish steps
+        run: echo "Publishing from master branch"
+
+      - name: Trigger deploy workflow
+        run: echo "Publish workflow completed successfully"
