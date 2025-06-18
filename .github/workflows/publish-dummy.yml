@@ -21,4 +21,5 @@ jobs:
       - name: Trigger workflow on develop branch
         uses: peter-evans/repository-dispatch@v3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           event-type: trigger-develop
