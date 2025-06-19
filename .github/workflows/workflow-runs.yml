@@ -3,7 +3,7 @@ name: Triggered Workflow on Non-Default Branch
 on:
   workflow_run:
     workflows:
-      - Default Branch Workflow Name
+      - Publish Workflow
     types:
       - completed
 
