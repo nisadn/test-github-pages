@@ -1,9 +1,9 @@
 name: Deploy Storybook
 
 on:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
 
   # workflow_dispatch:
   #   inputs: 
@@ -12,13 +12,16 @@ on:
   #       required: true
   #       default: 'master'
 
+  repository_dispatch:
+    types: trigger-deploy
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: gh-pages
+          ref: master
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.1
