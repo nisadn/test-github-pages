@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -19,6 +23,7 @@ jobs:
         run: echo "Publish workflow completed successfully"
 
       - name: Trigger workflow on develop branch
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
           event-type: trigger-develop
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
