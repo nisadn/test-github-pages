@@ -26,4 +26,4 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           event-type: trigger-develop
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+          client-payload: '{"ref": "test-repository-dispatch", "sha": "${{ github.sha }}"}'
