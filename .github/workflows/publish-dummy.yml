@@ -21,9 +21,3 @@ jobs:
 
       - name: Trigger deploy workflow
         run: echo "Publish workflow completed successfully"
-
-      - name: Trigger workflow on develop branch
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          event-type: trigger-develop
-          client-payload: '{"ref": "master", "sha": "${{ github.sha }}"}'
