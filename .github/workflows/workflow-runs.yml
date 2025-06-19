@@ -1,0 +1,19 @@
+name: Triggered Workflow on Non-Default Branch
+
+on:
+  workflow_run:
+    branches:
+      - test-workflow-runs
+    workflows:
+      - Publish Workflow
+    types:
+      - completed
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Run a Script
+        run: echo "This workflow runs after the default branch workflow completes."
