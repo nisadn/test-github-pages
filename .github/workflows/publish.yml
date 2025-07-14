@@ -35,7 +35,7 @@ jobs:
     needs: force-fail
     if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
-      checkout_branch: 'v.0.0.1'
+      checkout_branch: 'v0.0.3'
     permissions:
       contents: read
       pages: write
