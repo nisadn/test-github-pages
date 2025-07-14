@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "run:publish": "node .github/scripts/publish.js"
   },
   "dependencies": {
     "next": "15.3.1",
