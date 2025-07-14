@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: refs/tags/${{ inputs.checkout_branch }}
+          ref: /refs/tags/${{ inputs.checkout_branch }}
 
       # - name: Checkout specific tag
       #   uses: chachako/checkout-tags@v1
