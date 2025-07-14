@@ -8,3 +8,7 @@ jobs:
     uses: ./.github/workflows/deploy-storybook.yml
     with:
       checkout_branch: 'main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
