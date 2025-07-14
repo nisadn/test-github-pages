@@ -27,7 +27,7 @@ jobs:
       - name: Checkout specific tag
         uses: chachako/checkout-tags@v1
         with:
-          tag: 'v0.0.3' # Replace 'v1.0.0' with the tag you want to checkout
+          base: nisadn/test-github-pages
 
       - name: Verify checked-out tag
         run: |
