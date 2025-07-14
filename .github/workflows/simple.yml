@@ -18,6 +18,9 @@ on:
 
 jobs:
   simple-job:
-    run: |
-      echo "This is a simple job running on branch: ${{ inputs.checkout_branch }}"
-      echo "Job completed successfully!"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test echo
+        run: |
+          echo "This is a simple job running on branch: ${{ github.event.inputs.checkout_branch }}"
+          echo "Job completed successfully!"
