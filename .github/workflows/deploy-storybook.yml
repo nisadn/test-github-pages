@@ -2,6 +2,11 @@ name: Deploy Storybook
 
 on:
   workflow_call: 
+    inputs: 
+      checkout_branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
   workflow_dispatch:
     inputs: 
       checkout_branch:
