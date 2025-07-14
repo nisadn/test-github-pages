@@ -8,6 +8,13 @@ on:
         required: true
         default: "false"
         type: string
+      package:
+        type: choice
+        description: Package name
+        required: true
+        options:
+          - accomfe-ui
+          - another-package
 
 jobs:
   force-fail:
@@ -26,6 +33,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/simple.yml
     needs: force-fail
+    if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
       checkout_branch: 'main'
     # permissions:
