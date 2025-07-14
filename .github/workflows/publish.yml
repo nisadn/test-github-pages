@@ -31,7 +31,7 @@ jobs:
           fi
 
   deploy:
-    uses: ./.github/workflows/simple.yml
+    uses: ./.github/workflows/deploy-storybook.yml
     needs: force-fail
     if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
