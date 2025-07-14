@@ -4,18 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Run some dummy tasks
-        run: echo "Running dummy tasks..."
-
-      - name: Call deploy-storybook
-        uses: ./.github/workflows/deploy-storybook.yml
-        if: ${{ !cancelled() }}
-        with:
-          checkout_branch: 'main'
+  deploy:
+    uses: ./.github/workflows/deploy-storybook.yml
+    with:
+      checkout_branch: 'main'
