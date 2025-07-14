@@ -23,11 +23,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-tags: true
-          
+
       - name: Checkout Tags
         run: |
-          echo "Checking out tags: ${{ github.event.inputs.checkout_tags }}"
-          git checkout ${{ github.event.inputs.checkout_tags }}
+          echo "Checking out tags: ${{ inputs.checkout_tags }}"
+          git checkout ${{ inputs.checkout_tags }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
