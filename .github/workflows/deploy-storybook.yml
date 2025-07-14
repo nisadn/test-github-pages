@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
+          # fetch-depth: 0 # Fetch all history for all branches and tags
           ref: refs/tags/${{ inputs.checkout_tags }}
 
       # - name: Checkout specific tag
