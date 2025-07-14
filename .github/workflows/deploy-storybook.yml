@@ -3,15 +3,15 @@ name: Deploy Storybook
 on:
   workflow_call: 
     inputs: 
-      checkout_branch:
-        description: 'Branch to deploy'
+      checkout_tags:
+        description: 'Tags to deploy'
         required: true
         default: 'master'
         type: string
   workflow_dispatch:
     inputs: 
-      checkout_branch:
-        description: 'Branch to deploy'
+      checkout_tags:
+        description: 'Tags to deploy'
         required: true
         default: 'master'
         type: string
@@ -22,7 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.checkout_branch }}
+          fetch-tags: true
+        run: |
+          echo "Checking out tags: ${{ github.event.inputs.checkout_tags }}"
+          git checkout ${{ github.event.inputs.checkout_tags }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
