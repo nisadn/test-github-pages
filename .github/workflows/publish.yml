@@ -1,20 +1,6 @@
 name: Publish Workflow
 
-on:
-  workflow_dispatch:
-    inputs:
-      force_fail:
-        description: "Set to 'true' to force the workflow to fail"
-        required: true
-        default: "false"
-        type: string
-      package:
-        type: choice
-        description: Package name
-        required: true
-        options:
-          - accomfe-ui
-          - another-package
+on: push
 
 jobs:
   force-fail:
@@ -33,7 +19,7 @@ jobs:
   deploy:
     uses: ./.github/workflows/deploy-storybook.yml
     needs: force-fail
-    if: ${{ github.event.inputs.package == 'accomfe-ui' }}
+    # if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
       checkout_branch: 'main'
     # permissions:
