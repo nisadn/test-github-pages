@@ -32,6 +32,14 @@ jobs:
             echo "Input is false. Workflow will succeed."
           fi
 
+      - uses: actions/checkout@v4
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
       - name: Run Publish
         id: run-publish-script
         run: |
