@@ -22,7 +22,7 @@ jobs:
     # if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
       checkout_branch: 'main'
-    # permissions:
-    #   contents: read
-    #   pages: write
-    #   id-token: write
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
