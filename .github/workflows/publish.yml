@@ -32,29 +32,24 @@ jobs:
             echo "Input is false. Workflow will succeed."
           fi
 
-      - uses: actions/checkout@v4
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-          node-version-file: .nvmrc
-          cache: 'yarn'
-
-      - name: Run Publish
-        id: run-publish-script
-        run: |
-          echo "Running publish script for accomfe-ui"
-          # Add your publish commands here
-          OUTPUT=$(yarn run:publish)
-          echo "tags=$OUTPUT" >> "$GITHUB_OUTPUT"
-          echo "Publish script completed successfully."
-
   deploy:
-    uses: ./.github/workflows/deploy-storybook.yml
     needs: force-fail
-    with:
-      checkout_tags: ${{ needs.force-fail.outputs.new_tag }}
     permissions:
       contents: read
       pages: write
       id-token: write
+    outputs:
+      latest_tag: ${{ steps.get-latest-tag.outputs.latest_tag }}
+    steps:
+      - name: Get latest tag
+        id: get-latest-tag
+          echo "Fetching latest tag..."
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
+          echo "Latest tag is: $LATEST_TAG"
+
+      - name: "Deploying"
+        uses: ./.github/workflows/deploy-storybook.yml
+        with:
+          checkout_tags: ${{ needs.force-fail.outputs.new_tag }}
