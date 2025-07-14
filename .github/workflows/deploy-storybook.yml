@@ -25,7 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: /refs/tags/${{ inputs.checkout_branch }}
+          fetch-depth: 0 # Fetch all history for all branches and tags
+          ref: refs/tags/${{ inputs.checkout_branch }}
 
       # - name: Checkout specific tag
       #   uses: chachako/checkout-tags@v1
