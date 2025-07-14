@@ -1,19 +1,12 @@
 name: Deploy Storybook
 
 on:
-  # push:
-  #   branches:
-  #     - master
-
-  # workflow_dispatch:
-  #   inputs: 
-  #     checkout_branch:
-  #       description: 'Branch to deploy'
-  #       required: true
-  #       default: 'master'
-
-  repository_dispatch:
-    types: [trigger-develop]
+  workflow_dispatch:
+    inputs: 
+      checkout_branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'main'
 
 jobs:
   build:
@@ -21,10 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: master
+          ref: ${{ github.event.inputs.checkout_branch }}
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.1
+        uses: actions/setup-node@v4
         with:
           # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
           node-version-file: .nvmrc
