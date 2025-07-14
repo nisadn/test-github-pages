@@ -25,7 +25,7 @@ jobs:
 
   deploy:
     uses: ./.github/workflows/simple.yml
-    needs: publish
+    needs: force-fail
     with:
       checkout_branch: 'main'
     # permissions:
