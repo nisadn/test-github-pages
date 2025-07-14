@@ -24,11 +24,11 @@ jobs:
           fi
 
   deploy:
-    uses: ./.github/workflows/deploy-storybook.yml
+    uses: ./.github/workflows/simple.yml
     needs: publish
     with:
       checkout_branch: 'main'
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+    # permissions:
+    #   contents: read
+    #   pages: write
+    #   id-token: write
