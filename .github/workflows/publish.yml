@@ -9,13 +9,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run some dummy tasks
         run: echo "Running dummy tasks..."
 
       - name: Call deploy-storybook
-        uses: ./deploy-storybook.yml
+        uses: ./.github/workflows/deploy-storybook.yml
         if: ${{ !cancelled() }}
         with:
           checkout_branch: 'main'
