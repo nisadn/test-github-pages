@@ -6,15 +6,13 @@ on:
       checkout_branch:
         description: 'Branch to deploy'
         required: true
-        default: 'main'
-        type: string
+        default: 'master'
   workflow_dispatch:
     inputs: 
       checkout_branch:
         description: 'Branch to deploy'
         required: true
-        default: 'main'
-        type: string
+        default: 'master'
 
 jobs:
   build:
