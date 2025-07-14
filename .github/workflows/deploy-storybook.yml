@@ -7,12 +7,14 @@ on:
         description: 'Branch to deploy'
         required: true
         default: 'master'
+        type: string
   workflow_dispatch:
     inputs: 
       checkout_branch:
         description: 'Branch to deploy'
         required: true
         default: 'master'
+        type: string
 
 jobs:
   build:
