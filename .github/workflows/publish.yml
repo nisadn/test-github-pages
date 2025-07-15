@@ -19,8 +19,6 @@ on:
 jobs:
   force-fail:
     runs-on: ubuntu-latest
-    outputs:
-      new_tag: ${{ steps.run-publish-script.outputs.tags }}
     steps:
       - name: Check input and force failure if needed
         run: |
@@ -39,19 +37,15 @@ jobs:
       contents: read
       pages: write
       id-token: write
-    outputs:
-      latest_tag: ${{ steps.get-latest-tag.outputs.latest_tag }}
     steps:
-      - name: Get latest tag
-        id: get-latest-tag
-        run: |
-          echo "Fetching latest tag..."
-          git fetch --tags
-          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "latest_tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
-          echo "Latest tag is: $LATEST_TAG"
+      - name: Get latest tag pushed
+        id: tag
+        uses: 32teeth/action-github-tag@v1
+      
+      - name: Use the latest tag pushed
+        run: echo ${{steps.tag.outputs.tag}}
 
       - name: "Deploying"
         uses: ./.github/workflows/deploy-storybook.yml
         with:
-          checkout_tags: ${{ needs.force-fail.outputs.new_tag }}
+          checkout_tags: ${{steps.tag.outputs.tag}}
