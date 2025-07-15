@@ -62,14 +62,14 @@ jobs:
         run: |
           echo '{
             "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
-            "last_commit": "$LATEST_COMMIT"
-          }' > deployment-info.json
+            "last_commit": "'$LATEST_COMMIT'"
+          }' > whoami.json
 
       # Step 3: Create a directory for deployment (if needed)
       - name: Prepare deployment directory
         run: |
           mkdir -p deployment
-          mv deployment-info.json deployment/
+          mv whoami.json deployment/
 
       # Step 4: Upload the directory to GitHub Pages
       - name: Upload to GitHub Pages
