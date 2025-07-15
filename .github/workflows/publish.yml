@@ -39,15 +39,14 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions-ecosystem/action-get-latest-tag@v1
+        id: get-latest-tag
       
-      - name: 'Get Previous tag'
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      
-      - name: Use the latest tag pushed
-        run: echo ${{ steps.previoustag.outputs.tag }}
+      - name: "Check latest tag"
+        run: |
+          echo "Checking out tag: ${{ steps.get-latest-tag.outputs.tag }}"
 
       - name: "Deploying"
         uses: ./.github/workflows/deploy-storybook.yml
         with:
-          checkout_tags: ${{ steps.previoustag.outputs.tag }}
+          checkout_tags: ${{ steps.get-latest-tag.outputs.tag }}
