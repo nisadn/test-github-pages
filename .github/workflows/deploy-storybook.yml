@@ -40,22 +40,22 @@ jobs:
           echo "Latest commit in branch ${{ inputs.checkout_ref }}: $(git rev-parse HEAD)"
           echo "LATEST_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
-      # - name: Setup Node.js environment
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-      #     node-version-file: .nvmrc
-      #     cache: 'yarn'
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+          node-version-file: .nvmrc
+          cache: 'yarn'
       
-      # - name: Run install
-      #   uses: borales/actions-yarn@v4
-      #   with:
-      #     cmd: install --frozen-lockfile # will run `yarn install` command
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install --frozen-lockfile # will run `yarn install` command
       
-      # - name: Build static storybook
-      #   uses: borales/actions-yarn@v4
-      #   with:
-      #     cmd: build-storybook -o storybook-static
+      - name: Build static storybook
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build-storybook -o storybook-static
 
       # Step 2: Generate a JSON file
       - name: Generate deployment info JSON
@@ -75,7 +75,9 @@ jobs:
       - name: Upload to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deployment
+          path: |
+            storybook-static
+            deployment
   
   deploy:
     permissions:
