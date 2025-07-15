@@ -35,36 +35,34 @@ jobs:
         with:
           ref: ${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4
-        with:
-          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-          node-version-file: .nvmrc
-          cache: 'yarn'
+      - name: Get Latest Commit in Branch
+        run: |
+          echo "Latest commit in branch ${{ inputs.checkout_ref }}: $(git rev-parse HEAD)"
+          echo "GITHUB_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      # - name: Setup Node.js environment
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+      #     node-version-file: .nvmrc
+      #     cache: 'yarn'
       
-      - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install --frozen-lockfile # will run `yarn install` command
+      # - name: Run install
+      #   uses: borales/actions-yarn@v4
+      #   with:
+      #     cmd: install --frozen-lockfile # will run `yarn install` command
       
       # - name: Build static storybook
       #   uses: borales/actions-yarn@v4
       #   with:
       #     cmd: build-storybook -o storybook-static
 
-      # # Runs upload artifacts
-      # - name: upload artifact
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: info
-
       # Step 2: Generate a JSON file
       - name: Generate deployment info JSON
         run: |
           echo '{
-            "version": "1.0.0",
-            "branch": "${{ github.ref_name }}",
-            "last_commit": "$(git log -1 --pretty=format:%H)"
+            "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
+            "last_commit": "$LATEST_COMMIT"
           }' > deployment-info.json
 
       # Step 3: Create a directory for deployment (if needed)
