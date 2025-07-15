@@ -42,10 +42,15 @@ jobs:
       # Step 2: Generate a JSON file
       - name: Generate deployment info JSON
         run: |
-          echo '{
-            "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
-            "last_commit": "'$LATEST_COMMIT'"
-          }' > ./stories/whoami.mdx
+          echo '```json
+          {
+            "name": "John Doe",
+            "age": 30,
+            "email": "john.doe@example.com",
+            "skills": ["JavaScript", "HTML", "CSS"],
+            "active": true
+          }
+          ```' > ./stories/whoami.mdx
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
