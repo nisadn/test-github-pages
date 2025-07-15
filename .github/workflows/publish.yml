@@ -38,14 +38,14 @@ jobs:
       pages: write
       id-token: write
     steps:
-      - name: Get latest tag pushed
-        id: tag
-        uses: 32teeth/action-github-tag@v1
+      - name: 'Get Previous tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
       
       - name: Use the latest tag pushed
-        run: echo ${{steps.tag.outputs.tag}}
+        run: echo ${{ steps.previoustag.outputs.tag }}
 
       - name: "Deploying"
         uses: ./.github/workflows/deploy-storybook.yml
         with:
-          checkout_tags: ${{steps.tag.outputs.tag}}
+          checkout_tags: ${{ steps.previoustag.outputs.tag }}
