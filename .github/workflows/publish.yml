@@ -47,10 +47,10 @@ jobs:
 
   deploy:
     uses: ./.github/workflows/deploy-storybook.yml
-    needs: force-fail
+    needs: [force-fail, get-latest-tag]
     if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
-      checkout_branch: ${{ needs.get-latest-tag.outputs.tag }}
+      checkout_tags: ${{ needs.get-latest-tag.outputs.tag }}
     permissions:
       contents: read
       pages: write
