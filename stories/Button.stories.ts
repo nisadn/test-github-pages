@@ -28,7 +28,7 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     primary: true,
-    label: 'This Button is modified after v0.1.0',
+    label: 'This Button is modified after v0.0.6',
   },
 };
 
