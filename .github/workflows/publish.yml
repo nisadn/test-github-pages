@@ -30,23 +30,28 @@ jobs:
             echo "Input is false. Workflow will succeed."
           fi
 
-  deploy:
+  get-latest-tag:
     needs: force-fail
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+    outputs:
+      tag: ${{ steps.get-latest-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions-ecosystem/action-get-latest-tag@v1
         id: get-latest-tag
-      
+
       - name: "Check latest tag"
         run: |
           echo "Checking out tag: ${{ steps.get-latest-tag.outputs.tag }}"
 
-      - name: "Deploying"
-        uses: ./.github/workflows/deploy-storybook.yml
-        with:
-          checkout_tags: ${{ steps.get-latest-tag.outputs.tag }}
+  deploy:
+    uses: ./.github/workflows/deploy-storybook.yml
+    needs: force-fail
+    if: ${{ github.event.inputs.package == 'accomfe-ui' }}
+    with:
+      checkout_branch: ${{ needs.get-latest-tag.outputs.tag }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
