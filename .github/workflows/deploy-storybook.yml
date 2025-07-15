@@ -62,11 +62,7 @@ jobs:
           echo '{
             "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
             "last_commit": "'$LATEST_COMMIT'"
-          }' > whoami.json
-
-      # Step 3: Create a directory for deployment (if needed)
-      - name: Prepare deployment directory
-        run: mv whoami.json storybook-static/
+          }' > storybook-static/whoami.json
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
