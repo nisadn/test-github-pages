@@ -44,11 +44,8 @@ jobs:
         run: |
           echo '```json
           {
-            "name": "John Doe",
-            "age": 30,
-            "email": "john.doe@example.com",
-            "skills": ["JavaScript", "HTML", "CSS"],
-            "active": true
+            "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
+            "last_commit": "'$LATEST_COMMIT'"
           }
           ```' > ./stories/whoami.mdx
 
