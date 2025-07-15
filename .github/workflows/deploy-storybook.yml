@@ -66,14 +66,12 @@ jobs:
 
       # Step 3: Create a directory for deployment (if needed)
       - name: Prepare deployment directory
-        run: |
-          mkdir -p deployment
-          mv whoami.json deployment/
+        run: mv whoami.json storybook-static/
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-static, deployment
+          path: storybook-static
   
   deploy:
     permissions:
