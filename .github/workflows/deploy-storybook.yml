@@ -4,12 +4,9 @@ on:
   workflow_call: 
     inputs: 
       ref_type:
-        type: choice
+        type: string
         description: 'Type of reference to deploy'
         required: true
-        options:
-          - tags
-          - branch
       checkout_ref:
         description: 'Branch/Tags to deploy (accomfe-ui@1.0.3, master, etc.)'
         required: true
