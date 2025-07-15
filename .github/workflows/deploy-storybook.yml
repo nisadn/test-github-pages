@@ -47,16 +47,16 @@ jobs:
         with:
           cmd: install --frozen-lockfile # will run `yarn install` command
       
-      - name: Build static storybook
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build-storybook -o storybook-static
+      # - name: Build static storybook
+      #   uses: borales/actions-yarn@v4
+      #   with:
+      #     cmd: build-storybook -o storybook-static
 
       # Runs upload artifacts
       - name: upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-static
+          path: info
   
   deploy:
     permissions:
