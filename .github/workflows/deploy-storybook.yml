@@ -45,7 +45,7 @@ jobs:
           echo '{
             "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
             "last_commit": "'$LATEST_COMMIT'"
-          }' > stories/whoami.mdx
+          }' > ./stories/whoami.mdx
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
