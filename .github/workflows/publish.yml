@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-tags: true
+          fetch-depth: 0  # Fetch all tags
 
       - name: Get latest tag
         id: get-latest-tag
