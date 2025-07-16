@@ -40,9 +40,9 @@ jobs:
       - name: Get latest tag
         id: get-latest-tag
         run: |
-          latest_tag=$(git tag --sort=v:refname | tail -n 1)
-          echo "Latest tag: $latest_tag"
-          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
+          LATEST_TAG=$(git tag --sort=v:refname | tail -n 1)
+          echo "Latest tag: $LATEST_TAG"
+          echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
 
   deploy:
     uses: ./.github/workflows/deploy-storybook.yml
