@@ -43,8 +43,8 @@ jobs:
       - name: Get latest tag
         id: get-latest-tag
         run: |
-          LATEST_TAG=$(git tag --sort=v:refname | tail -n 1)
-          echo "check $(git tag --sort=v:refname | tail -n 1)"
+          LATEST_TAG='test'
+          git tag --sort=v:refname | tail -n 1)
           echo "Latest tag: $LATEST_TAG"
           echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
 
