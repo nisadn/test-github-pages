@@ -37,9 +37,6 @@ jobs:
       tag: ${{ steps.get-latest-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-tags: true
-
       - name: Get latest tag
         id: get-latest-tag
         run: |
