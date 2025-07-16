@@ -37,9 +37,13 @@ jobs:
       tag: ${{ steps.get-latest-tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all tags
+          
       - name: Get latest tag
         id: get-latest-tag
         run: |
+          git tag
           LATEST_TAG='test'
           git tag --sort=v:refname | tail -n 1
           echo "Latest tag: $LATEST_TAG"
