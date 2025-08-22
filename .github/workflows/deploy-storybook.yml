@@ -49,7 +49,7 @@ jobs:
       - name: Build jsdoc
         uses: borales/actions-yarn@v4
         with:
-          cmd: jsdoc --out docs/utils
+          cmd: docs --out docs/utils
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
