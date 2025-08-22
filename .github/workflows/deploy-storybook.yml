@@ -64,10 +64,7 @@ jobs:
       - name: Build static storybook
         uses: borales/actions-yarn@v4
         with:
-          cmd: build-storybook -o storybook-static
-
-      - name: Prepare artifact folder
-        run: mkdir -p docs && mv storybook-static docs/storybook
+          cmd: build-storybook -o docs
 
       - name: Make another html
         run: |
