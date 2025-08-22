@@ -62,7 +62,7 @@ jobs:
           cmd: install --frozen-lockfile # will run `yarn install` command
 
       - name: Test make new html
-        run: |run: |
+        run: |
           echo '{
             "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
             "last_commit": "'$LATEST_COMMIT'"
