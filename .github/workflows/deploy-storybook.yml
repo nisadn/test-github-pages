@@ -1,31 +1,6 @@
 name: Deploy Storybook
 
-on:
-  workflow_call: 
-    inputs: 
-      ref_type:
-        type: string
-        description: 'Type of reference to deploy'
-        required: true
-      checkout_ref:
-        description: 'Branch/Tags to deploy (accomfe-ui@1.0.3, master, etc.)'
-        required: true
-        default: 'master'
-        type: string
-  workflow_dispatch:
-    inputs: 
-      ref_type:
-        type: choice
-        description: 'Type of reference to deploy'
-        required: true
-        options:
-          - tags
-          - branch
-      checkout_ref:
-        description: 'Branch/Tags to deploy (accomfe-ui@1.0.3, master, etc.)'
-        required: true
-        default: 'master'
-        type: string
+on: [push]
 
 jobs:
   build:
@@ -33,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}
+          ref: feat/jsdoc
 
       - name: Get Latest Commit in Branch
         run: |
@@ -44,7 +19,7 @@ jobs:
         run: |
           echo '```json
           {
-            "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
+            "source": "feat/jsdoc",
             "last_commit": "'$LATEST_COMMIT'"
           }
           ```' > ./stories/whoami.mdx
