@@ -71,6 +71,11 @@ jobs:
           mkdir -p docs/extra-folder
           echo "<!DOCTYPE html><html><body><h1>Extra HTML Page</h1></body></html>" > docs/extra-folder/index.html
 
+      - name: Build jsdoc
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: jsdoc --out docs/utils
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
