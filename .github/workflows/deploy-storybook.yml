@@ -60,16 +60,23 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: install --frozen-lockfile # will run `yarn install` command
+
+      - name: Test make new html
+        run: |run: |
+          echo '{
+            "source": "${{ inputs.ref_type == 'tags' && 'refs/tags/' || '' }}${{ inputs.checkout_ref }}",
+            "last_commit": "'$LATEST_COMMIT'"
+          }' > public/another-page.html
       
       - name: Build static storybook
         uses: borales/actions-yarn@v4
         with:
-          cmd: build-storybook -o storybook-static
+          cmd: build-storybook -o public/storybook-static
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: storybook-static
+          path: public
   
   deploy:
     permissions:
