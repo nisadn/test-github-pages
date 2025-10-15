@@ -25,6 +25,7 @@ jobs:
         run: echo "Waiting for approval to proceed with resetting shared staging branch."
 
   shared_staging:
+    runs-on: ubuntu-latest
     needs: approval
     steps:
       - name: create shared staging
