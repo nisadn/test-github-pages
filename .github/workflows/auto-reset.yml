@@ -18,8 +18,8 @@ jobs:
           base_branch: "master"
           target_branch: "reset-shared-staging"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   reset_shared_staging:
-    runs-on: ubuntu-latest
     needs: create_reset_branch
     uses: ./.github/workflows/reset-shared-staging.yml
     environment: auto-reset
