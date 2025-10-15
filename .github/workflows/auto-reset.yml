@@ -1,6 +1,9 @@
-name: Scheduled Reset Shared Staging
+name: Auto Reset
+run-name: Reset test branch
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - feat/test-auto-reset*
 
 jobs:
   create_reset_branch:

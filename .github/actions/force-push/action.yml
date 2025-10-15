@@ -1,8 +1,9 @@
-name: 'Duplicate and Force Push Branch'
+name: 'Force Push'
 inputs:
   base_branch:
     description: "Base branch"
-    required: trues
+    required: true
+    default: "master"
     type: string
   target_branch:
     description: "Target branch"
