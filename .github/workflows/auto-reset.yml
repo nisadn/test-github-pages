@@ -41,7 +41,3 @@ jobs:
         with:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
-      - name: Delete Temporary Reset Branch
-        uses: ./.github/workflows/delete-branch.yml
-        with:
-          delete_branch: "reset-shared-staging"
