@@ -13,7 +13,7 @@ runs:
       with:
         script: |
           const branchToDelete = '${{ inputs.delete_branch }}';
-          if (branchToDelete != 'test-only' && !branchToDelete.startsWith('test/')) {
+          if (branchToDelete != 'master' && !branchToDelete.startsWith('test/')) {
             await github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -21,5 +21,5 @@ runs:
             });
             console.log('Delete branch', branchToDelete);
           } else {
-            core.setFailed('Refusing to delete protected branch: ' + branchToDelete);
+            core.setFailed('Refusing to delete branch: ' + branchToDelete);
           }
