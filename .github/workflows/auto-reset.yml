@@ -46,4 +46,6 @@ jobs:
         with:
           delete_branch: "reset-shared-staging"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: ${{ context.repo.owner }}
+          REPO_NAME: ${{ context.repo.repo }}
   

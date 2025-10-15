@@ -7,6 +7,12 @@ inputs:
   GITHUB_TOKEN:
     required: true
     type: string
+  REPO_OWNER:
+    required: true
+    type: string
+  REPO_NAME:
+    required: true
+    type: string
 
 runs:
   using: 'composite'
@@ -20,8 +26,8 @@ runs:
         script: |
           const branchToDelete = '${{ inputs.delete_branch }}';
           await github.rest.git.deleteRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
+            owner: '${{ inputs.REPO_OWNER }}',
+            repo: '${{ inputs.REPO_NAME }}',
             ref: `heads/${branchToDelete}`
           });
           console.log('Delete branch', branchToDelete);
