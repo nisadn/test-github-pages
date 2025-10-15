@@ -16,11 +16,6 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Override git config
-      shell: bash
-      run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
     - name: Force push branch
       id: force_branch
       shell: bash

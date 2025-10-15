@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Override git config
+        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - uses: ./.github/actions/force-push
         secrets: inherit
         with:
@@ -21,6 +23,8 @@ jobs:
     environment: auto-reset
     steps:
       - uses: actions/checkout@v4
+      - name: Override git config
+        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Upsert shared-staging branch
         uses: ./.github/actions/force-push
         secrets: inherit
