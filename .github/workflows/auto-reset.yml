@@ -24,7 +24,5 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: ./.github/workflows/force-push.yml
-        with:
-          base_branch: "master"
-          target_branch: "reset-shared-staging"
+      - name: testing steps
+        run: echo "This is a test step"
