@@ -33,6 +33,7 @@ jobs:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
       - name: Delete reset branch
         uses: ./.github/actions/delete-branch
         with:
