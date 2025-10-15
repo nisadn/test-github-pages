@@ -19,7 +19,10 @@ jobs:
   update:
     runs-on: ubuntu-latest
     environment: auto-reset
+    needs: create
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Create
         uses: ./.github/workflows/force-push.yml
         with:
