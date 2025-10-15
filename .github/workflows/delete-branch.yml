@@ -11,12 +11,12 @@ on:
 jobs:
   force_push_branch:
     runs-on: ubuntu-latest
-    uses: actions/github-script@v7
     if: ${{ inputs.delete_branch != 'master' && !startsWith(inputs.delete_branch, 'test/') }}
     steps:
       - name: Override git config
         run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Delete Branch
+        uses: actions/github-script@v7
         env:
           DELETE_BRANCH: ${{ inputs.delete_branch }}
         with:
