@@ -30,14 +30,13 @@ jobs:
 
   force:
     runs-on: ubuntu-latest
-    secrets: inherit
-    permissions:
-      contents: write
-      id-token: write
     steps:
-      - name: Force Push Shared Staging Branch
-        needs: upsert
+      - name: Upsert shared staging branch
         uses: ./.github/workflows/force-push.yml
+        secrets: inherit
+        permissions:
+          contents: write
+          id-token: write
         with:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
