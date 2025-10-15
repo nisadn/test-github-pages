@@ -10,9 +10,6 @@ inputs:
     required: true
     type: string
 
-outputs:
-  force_push_result: ${{ steps.force_branch.outputs.result }}
-
 runs:
   using: 'composite'
   steps:
@@ -34,10 +31,10 @@ runs:
           echo "Branch $TARGET_BRANCH already exists. Force pushing."
           git checkout -b $TARGET_BRANCH
           git push -f origin $TARGET_BRANCH
-          echo "result=Forcely Pushed: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "result=Forcely Pushed: $TARGET_BRANCH"
         else
           echo "Creating new branch $TARGET_BRANCH."
           git checkout -b $TARGET_BRANCH
           git push origin $TARGET_BRANCH
-          echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "result=Newly Created: $TARGET_BRANCH"
         fi
