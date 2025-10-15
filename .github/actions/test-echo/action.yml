@@ -7,7 +7,7 @@ inputs:
 
 runs:
   using: 'composite'
-  if: inputs.delete_branch != 'master' && !startsWith(inputs.delete_branch, 'test/')
   steps:
     - name: Test Echo
+      if: inputs.delete_branch != 'master' && !startsWith(inputs.delete_branch, 'test/')
       run: echo "Echo: ${{ inputs.delete_branch }}"
