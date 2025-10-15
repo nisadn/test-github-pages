@@ -10,10 +10,11 @@ inputs:
     required: true
     type: string
 
+outputs:
+  force_push_result: ${{ steps.force_branch.outputs.result }}
+
 runs:
   using: 'composite'
-  outputs:
-    force_push_result: ${{ steps.force_branch.outputs.result }}
   steps:
     - name: Checkout
       uses: actions/checkout@v4
