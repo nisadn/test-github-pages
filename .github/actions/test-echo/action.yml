@@ -1,0 +1,13 @@
+name: 'Test Echo'
+inputs:
+  delete_branch:
+    description: "Branch to delete"
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  if: ${{ inputs.delete_branch != 'master' && !startsWith(inputs.delete_branch, 'test/') }}
+  steps:
+    - name: Test Echo
+      run: echo "Echo: ${{ inputs.delete_branch }}"
