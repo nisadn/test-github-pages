@@ -17,12 +17,11 @@ jobs:
       target_branch: "reset-shared-staging"
 
   update:
-    environment: auto-reset
     uses: ./.github/workflows/force-push.yml
     secrets: inherit
     permissions:
       contents: write
       id-token: write
     with:
-      base_branch: "master"
-      target_branch: "reset-shared-staging"
+      base_branch: "reset-shared-staging"
+      target_branch: "feat/shared-staging"
