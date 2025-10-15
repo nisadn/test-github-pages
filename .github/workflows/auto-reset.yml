@@ -21,6 +21,9 @@ jobs:
     needs: create
     environment: auto-reset
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Upsert again
         uses: ./.github/workflows/force-push.yml
         with:
