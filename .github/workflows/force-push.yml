@@ -42,6 +42,7 @@ jobs:
 
           if [ -n "$MATCH_BRANCH_COUNT" ]; then
             echo "Branch $TARGET_BRANCH already exists Force pushing."
+            git checkout -b $TARGET_BRANCH
             git push -f origin $TARGET_BRANCH
             echo "result=Forcely Pushed: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
           else
