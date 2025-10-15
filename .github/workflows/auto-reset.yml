@@ -12,9 +12,6 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/force-push
         secrets: inherit
-        permissions:
-          contents: write
-          id-token: write
         with:
           base_branch: "master"
           target_branch: "reset-shared-staging"
@@ -27,17 +24,11 @@ jobs:
       - name: Upsert shared-staging branch
         uses: ./.github/actions/force-push
         secrets: inherit
-        permissions:
-          contents: write
-          id-token: write
         with:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
       - name: Delete temporary reset branch
         uses: ./.github/actions/delete-branch
         secrets: inherit
-        permissions:
-          contents: write
-          id-token: write
         with:
           delete_branch: "reset-shared-staging"
