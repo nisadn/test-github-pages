@@ -6,13 +6,22 @@ on:
       - feat/test-auto-reset
 
 jobs:
-  upsert:
+  create:
+    uses: ./.github/workflows/force-push.yml
+    secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
+    with:
+      base_branch: "master"
+      target_branch: "reset-shared-staging"
+
+  update:
     runs-on: ubuntu-latest
     environment: auto-reset
     steps:
-      - name: testing steps
-        secrets: inherit
-        permissions:
-          contents: write
-          id-token: write
-        run: echo "This is a test step"
+      - name: Create
+        uses: ./.github/workflows/force-push.yml
+        with:
+          base_branch: "reset-shared-staging"
+          target_branch: "feat/shared-staging"
