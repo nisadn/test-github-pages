@@ -8,6 +8,7 @@ on:
 jobs:
   upsert:
     runs-on: ubuntu-latest
+    environment: auto-reset
     steps:
       - name: testing steps
         run: echo "This is a test step"
