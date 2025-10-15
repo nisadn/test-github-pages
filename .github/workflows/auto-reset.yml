@@ -32,5 +32,11 @@ jobs:
     with:
       base_branch: "reset-shared-staging"
       target_branch: "feat/shared-staging"
-      delete_base_branch: true
+      delete_base_branch: false
+  
+  delete_reset_branch:
+    uses: ./.github/actions/delete-branch
+    needs: reset_shared_staging
+    with:
+      delete_branch: "reset-shared-staging"
   
