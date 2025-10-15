@@ -31,5 +31,5 @@ jobs:
       - name: Delete reset branch
         uses: ./.github/actions/delete-branch
         with:
-          delete_branch: "test/nothing"
+          delete_branch: "test-only"
 
