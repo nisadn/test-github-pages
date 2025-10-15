@@ -48,21 +48,21 @@ jobs:
             git push origin $TARGET_BRANCH
             echo "result=Newly Created: $TARGET_BRANCH"
           fi
-  delete_branch:
-    needs: duplicate_branch
-    runs-on: ubuntu-latest
-    if: ${{ inputs.delete_base_branch && inputs.base_branch != 'master' && !startsWith(inputs.base_branch, 'test/') }}
-    steps:
-      - name: Delete Branch
-        env:
-          DELETE_BRANCH: ${{ inputs.base_branch }}
-        with:
-          script: |
-            const { DELETE_BRANCH } = process.env;
-            await github.rest.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `heads/${DELETE_BRANCH}`
-            });
-            console.log('Delete branch', DELETE_BRANCH);
+  # delete_branch:
+  #   needs: duplicate_branch
+  #   runs-on: ubuntu-latest
+  #   if: ${{ inputs.delete_base_branch && inputs.base_branch != 'master' && !startsWith(inputs.base_branch, 'test/') }}
+  #   steps:
+  #     - name: Delete Branch
+  #       env:
+  #         DELETE_BRANCH: ${{ inputs.base_branch }}
+  #       with:
+  #         script: |
+  #           const { DELETE_BRANCH } = process.env;
+  #           await github.rest.git.deleteRef({
+  #             owner: context.repo.owner,
+  #             repo: context.repo.repo,
+  #             ref: `heads/${DELETE_BRANCH}`
+  #           });
+  #           console.log('Delete branch', DELETE_BRANCH);
 
