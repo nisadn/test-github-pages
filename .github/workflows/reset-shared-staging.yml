@@ -6,6 +6,7 @@ on:
 jobs:
   reset_shared_staging:
     runs-on: ubuntu-latest
+    environment: auto-reset
     permissions:
       contents: write
     steps:
