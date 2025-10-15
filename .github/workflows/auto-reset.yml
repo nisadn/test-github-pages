@@ -12,4 +12,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/test-echo
         with:
-          delete_branch: 'test-only'
+          delete_branch: 'test/only'
