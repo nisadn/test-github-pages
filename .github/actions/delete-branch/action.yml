@@ -13,15 +13,12 @@ runs:
   steps:
     - name: Delete Branch
       uses: actions/github-script@v7
-      shell: bash
-      env:
-        DELETE_BRANCH: ${{ inputs.delete_branch }}
       with:
         script: |
-          const { DELETE_BRANCH } = process.env;
+          const branchToDelete = '${{ inputs.delete_branch }}';
           await github.rest.git.deleteRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: `heads/${DELETE_BRANCH}`
+            ref: `heads/${branchToDelete}`
           });
-          console.log('Delete branch', DELETE_BRANCH);
+          console.log('Delete branch', branchToDelete);
