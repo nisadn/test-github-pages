@@ -1,5 +1,7 @@
 name: Scheduled Reset Shared Staging
 on:
+  schedule:
+    - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
   workflow_dispatch:
 
 jobs:
@@ -15,6 +17,9 @@ jobs:
           base_branch: "master"
           target_branch: "reset-shared-staging"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # TODO: post to lark
+  # needs: create_reset_branch
 
   reset_shared_staging:
     needs: create_reset_branch
