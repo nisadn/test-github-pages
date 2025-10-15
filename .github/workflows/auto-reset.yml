@@ -40,6 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: reset_shared_staging
     steps:
+      - uses: actions/checkout@v4
       - name: Delete reset branch
         uses: ./.github/actions/delete-branch
         with:
