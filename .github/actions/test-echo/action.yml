@@ -10,4 +10,5 @@ runs:
   steps:
     - name: Test Echo
       if: inputs.delete_branch == 'test-only'
-      run: echo "Echo: ${{ inputs.delete_branch }}"
+      run: |
+        echo "Echo: ${{ inputs.delete_branch }}"
