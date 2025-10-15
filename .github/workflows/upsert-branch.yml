@@ -12,31 +12,57 @@ on:
         description: "Target branch to create or update"
         required: true
         type: string
-    outputs:
-      upsert_result:
-        value: ${{ jobs.create_or_update_branch.outputs.upsert_result }}
+      delete_base_branch:
+        required: false
+        default: false
+        type: boolean
 
 jobs:
-  create_or_update_branch:
+  duplicate_branch:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      upsert_result: ${{ steps.upsert_branch.outputs.result }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Override git config
         run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
-      - name: Upsert branch
-        id: upsert_branch
+      - name: Duplicate branch
         run: |
           TARGET_BRANCH=${{ inputs.target_branch }}
           BASE_BRANCH=${{ inputs.base_branch }}
           git fetch origin $BASE_BRANCH
           git checkout $BASE_BRANCH
 
-          echo "Creating new branch $TARGET_BRANCH."
-          git checkout -b $TARGET_BRANCH
-          git push origin $TARGET_BRANCH
-          echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+          # Check if the branch already exists on the remote
+          BRANCH_EXISTS=$(git ls-remote --heads origin $TARGET_BRANCH)
+          MATCH_BRANCH_COUNT=$(echo "$BRANCH_EXISTS" | grep "refs/heads/$TARGET_BRANCH" || true)
+          echo "Count: $MATCH_BRANCH_COUNT"
+
+          if [ -n "$MATCH_BRANCH_COUNT" ]; then
+            echo "Branch $TARGET_BRANCH already exists. Force pushing."
+            git checkout -b $TARGET_BRANCH
+            git push -f origin $TARGET_BRANCH
+            echo "result=Forcely Pushed: $TARGET_BRANCH"
+          else
+            echo "Creating new branch $TARGET_BRANCH."
+            git checkout -b $TARGET_BRANCH
+            git push origin $TARGET_BRANCH
+            echo "result=Newly Created: $TARGET_BRANCH"
+          fi
+  delete_branch:
+    needs: duplicate_branch
+    runs-on: ubuntu-latest
+    if: ${{ inputs.delete_base_branch && inputs.base_branch != 'master' && !startsWith(inputs.base_branch, 'test/') }}
+    steps:
+      - name: Delete Branch
+        env:
+          DELETE_BRANCH: ${{ inputs.base_branch }}
+        with:
+          script: |
+            const { DELETE_BRANCH } = process.env;
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${DELETE_BRANCH}`
+            });
+            console.log('Delete branch', DELETE_BRANCH);
+
