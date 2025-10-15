@@ -35,6 +35,7 @@ jobs:
       id-token: write
     steps:
       - name: Upsert
+        id: shared-staging
         uses: ./.github/workflows/force-push.yml
         needs: upsert
         with:
