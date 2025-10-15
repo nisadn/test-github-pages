@@ -1,0 +1,15 @@
+name: 'Test Echo'
+inputs:
+  delete_branch:
+    description: "Branch to delete"
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Test Echo
+      if: inputs.delete_branch != 'master' && !startsWith(inputs.delete_branch, 'test/')
+      shell: bash
+      run: |
+        echo "Echo: ${{ inputs.delete_branch }}"

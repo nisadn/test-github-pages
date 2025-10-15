@@ -1,0 +1,46 @@
+name: 'Force Push'
+inputs:
+  base_branch:
+    description: "Base branch"
+    required: true
+    default: "master"
+    type: string
+  target_branch:
+    description: "Target branch"
+    required: true
+    type: string
+  GITHUB_TOKEN:
+    required: true
+    type: string
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Override git config
+      shell: bash
+      run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+    - name: Force push branch
+      id: force_branch
+      shell: bash
+      run: |
+        TARGET_BRANCH=${{ inputs.target_branch }}
+        BASE_BRANCH=${{ inputs.base_branch }}
+        git fetch origin $BASE_BRANCH
+        git checkout $BASE_BRANCH
+
+        # Check if the branch already exists on the remote
+        BRANCH_EXISTS=$(git ls-remote --heads origin $TARGET_BRANCH)
+        MATCH_BRANCH_COUNT=$(echo "$BRANCH_EXISTS" | grep "refs/heads/$TARGET_BRANCH" || true)
+        echo "Count: $MATCH_BRANCH_COUNT"
+
+        if [ -n "$MATCH_BRANCH_COUNT" ]; then
+          echo "Branch $TARGET_BRANCH already exists. Force pushing."
+          git checkout -b $TARGET_BRANCH
+          git push -f origin $TARGET_BRANCH
+          echo "result=Forcely Pushed: $TARGET_BRANCH"
+        else
+          echo "Creating new branch $TARGET_BRANCH."
+          git checkout -b $TARGET_BRANCH
+          git push origin $TARGET_BRANCH
+          echo "result=Newly Created: $TARGET_BRANCH"
+        fi

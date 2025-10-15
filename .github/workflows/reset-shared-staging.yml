@@ -1,33 +1,31 @@
-name: Force Push Branch
+name: Create or Update Branch
 
 on:
   workflow_call:
     inputs:
       base_branch:
-        description: "Base branch"
+        description: "Base branch to create the new branch from"
         required: true
-        default: "master"
+        default: "develop"
         type: string
       target_branch:
-        description: "Target branch"
+        description: "Target branch to create or update"
         required: true
         type: string
-    outputs:
-      force_push_result:
-        value: ${{ jobs.force_push_branch.outputs.force_push_result }}
+      delete_base_branch:
+        required: false
+        default: false
+        type: boolean
 
 jobs:
-  force_push_branch:
+  duplicate_branch:
     runs-on: ubuntu-latest
-    outputs:
-      force_push_result: ${{ steps.force_branch.outputs.result }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Override git config
         run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
-      - name: Force push branch
-        id: force_branch
+      - name: Duplicate branch
         run: |
           TARGET_BRANCH=${{ inputs.target_branch }}
           BASE_BRANCH=${{ inputs.base_branch }}
@@ -43,10 +41,29 @@ jobs:
             echo "Branch $TARGET_BRANCH already exists. Force pushing."
             git checkout -b $TARGET_BRANCH
             git push -f origin $TARGET_BRANCH
-            echo "result=Forcely Pushed: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+            echo "result=Forcely Pushed: $TARGET_BRANCH"
           else
             echo "Creating new branch $TARGET_BRANCH."
             git checkout -b $TARGET_BRANCH
             git push origin $TARGET_BRANCH
-            echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+            echo "result=Newly Created: $TARGET_BRANCH"
           fi
+  delete_branch:
+    needs: duplicate_branch
+    runs-on: ubuntu-latest
+    if: ${{ inputs.delete_base_branch && inputs.base_branch != 'master' && !startsWith(inputs.base_branch, 'test/') }}
+    steps:
+      - name: Delete base branch
+        uses: actions/github-script@v7
+        env:
+          BASE_BRANCH: ${{ inputs.base_branch }}
+        with:
+          script: |
+            const { BASE_BRANCH } = process.env;
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${BASE_BRANCH}`
+            });
+            console.log('Delete branch', BASE_BRANCH);
+
