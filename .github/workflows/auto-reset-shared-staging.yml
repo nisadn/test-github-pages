@@ -1,0 +1,27 @@
+name: Scheduled Reset Shared Staging
+on:
+  workflow_dispatch:
+
+jobs:
+  create_reset_branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create temporary reset branch
+        uses: ./.github/actions/force-push
+        with:
+          base_branch: "master"
+          target_branch: "reset-shared-staging"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  reset_shared_staging:
+    needs: create_reset_branch
+    uses: ./.github/workflows/reset-shared-staging.yml
+    permissions:
+      contents: write
+    with:
+      base_branch: "reset-shared-staging"
+      target_branch: "feat/shared-staging"
+  
