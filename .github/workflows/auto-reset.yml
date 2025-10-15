@@ -37,7 +37,6 @@ jobs:
     steps:
       - name: Force Push Shared Staging Branch
         uses: ./.github/workflows/force-push.yml
-        environment: auto-reset
         with:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
