@@ -8,7 +8,6 @@ on:
 jobs:
   create_reset_branch:
     runs-on: ubuntu-latest
-    secrets: inherit
     steps:
       - uses: actions/checkout@v4
       - name: Create or Force Push reset branch
@@ -16,6 +15,7 @@ jobs:
         with:
           base_branch: "master"
           target_branch: "reset-shared-staging"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
   # waiting_per_approval:
   #   runs-on: ubuntu-latest

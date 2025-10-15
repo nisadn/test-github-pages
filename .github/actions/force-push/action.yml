@@ -9,13 +9,16 @@ inputs:
     description: "Target branch"
     required: true
     type: string
+  GITHUB_TOKEN:
+    required: true
+    type: string
 
 runs:
   using: 'composite'
   steps:
     - name: Override git config
       shell: bash
-      run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
     - name: Force push branch
       id: force_branch
       shell: bash
