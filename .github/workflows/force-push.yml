@@ -54,15 +54,13 @@ jobs:
       - name: Delete temporary reset branch
         uses: actions/github-script@v7
         env:
-          RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.release_branches }}
-          RETAINED_BRANCH_COUNT: ${{ inputs.retained_branch_count }}
+          BASE_BRANCH: ${{ inputs.base_branch }}
         with:
           script: |
-            BASE_BRANCH=${{ inputs.base_branch }}
+            const { BASE_BRANCH } = process.env;
             await github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `heads/${BASE_BRANCH}`
             });
-
-            echo "$BASE_BRANCH is successfully deleted"
+            console.log('Delete Branch', BASE_BRANCH);
