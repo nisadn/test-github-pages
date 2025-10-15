@@ -9,10 +9,10 @@ jobs:
   upsert:
     runs-on: ubuntu-latest
     environment: auto-reset
-    secrets: inherit
-    permissions:
-      contents: write
-      id-token: write
     steps:
       - name: testing steps
+        secrets: inherit
+        permissions:
+          contents: write
+          id-token: write
         run: echo "This is a test step"
