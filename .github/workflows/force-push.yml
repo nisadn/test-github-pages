@@ -24,7 +24,7 @@ on:
 jobs:
   force_push_branch:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.delete_branch == 'true' && 'auto-reset' || null }}
+    environment: ${{ inputs.delete_branch && 'auto-reset' || null }}
     outputs:
       force_push_result: ${{ steps.force_branch.outputs.result }}
     steps:

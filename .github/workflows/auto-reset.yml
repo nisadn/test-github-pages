@@ -22,8 +22,8 @@ jobs:
       contents: write
       id-token: write
     with:
-      target_branch: ${{ inputs.reset_branch }}
       base_branch: "master"
+      target_branch: ${{ inputs.reset_branch }}
       delete_branch: false
 
   force:
@@ -34,6 +34,6 @@ jobs:
       contents: write
       id-token: write
     with:
-      target_branch: ${{ inputs.reset_branch }}
-      base_branch: ${{ inputs.shared_staging_branch }}
+      base_branch: ${{ inputs.reset_branch }}
+      target_branch: ${{ inputs.shared_staging_branch }}
       delete_branch: true
