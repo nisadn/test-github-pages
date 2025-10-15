@@ -37,8 +37,12 @@ jobs:
       delete_base_branch: false
   
   delete_reset_branch:
-    uses: ./.github/actions/delete-branch
+    runs-on: ubuntu-latest
     needs: reset_shared_staging
-    with:
-      delete_branch: "reset-shared-staging"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Delete reset branch
+        uses: ./.github/actions/delete-branch
+        with:
+          delete_branch: "reset-shared-staging"
   
