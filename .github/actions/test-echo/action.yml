@@ -9,5 +9,5 @@ runs:
   using: 'composite'
   steps:
     - name: Test Echo
-      if: inputs.delete_branch != 'master'
+      if: inputs.delete_branch == 'test-only'
       run: echo "Echo: ${{ inputs.delete_branch }}"
