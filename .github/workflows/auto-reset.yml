@@ -19,9 +19,9 @@ jobs:
   update:
     runs-on: ubuntu-latest
     needs: create
-    environment: auto-reset
     steps:
       - name: Upsert again
+        environment: auto-reset
         uses: ./.github/workflows/test-echo.yml
         with:
           base_branch: "reset-shared-staging"
