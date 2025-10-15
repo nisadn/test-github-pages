@@ -19,6 +19,8 @@ on:
 jobs:
   create_or_update_branch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       upsert_result: ${{ steps.upsert_branch.outputs.result }}
     steps:
