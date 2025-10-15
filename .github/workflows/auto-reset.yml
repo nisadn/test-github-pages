@@ -22,4 +22,6 @@ jobs:
   reset_shared_staging:
     needs: create_reset_branch
     uses: ./.github/workflows/reset-shared-staging.yml
+    permissions:
+      contents: write
   
