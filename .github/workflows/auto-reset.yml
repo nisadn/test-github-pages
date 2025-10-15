@@ -29,13 +29,14 @@ jobs:
       target_branch: "reset-shared-staging"
 
   force:
-    uses: ./.github/workflows/force-push.yml
-    needs: upsert
-    environment: auto-reset
     secrets: inherit
     permissions:
       contents: write
       id-token: write
-    with:
-      base_branch: "reset-shared-staging"
-      target_branch: "feat/shared-staging"
+    steps:
+      - name: Upsert
+        uses: ./.github/workflows/force-push.yml
+        needs: upsert
+        with:
+          base_branch: "reset-shared-staging"
+          target_branch: "feat/shared-staging"
