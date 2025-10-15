@@ -7,27 +7,26 @@ on:
 
 jobs:
   create_reset_branch:
-    runs-on: ubuntu-latest
-    uses: ./.github/workflows/upsert-branch.yml
+    uses: ./.github/workflows/force-push.yml
     secrets: inherit
-    permission:
+    permissions:
       contents: write
       id-token: write
     with:
       base_branch: "master"
       target_branch: "reset-shared-staging"
-      delete_base_branch: false
+      delete_branch: false
 
   reset_shared_staging:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/force-push.yml
     needs: create_reset_branch
     environment: auto-reset
-    uses: ./.github/workflows/force-push.yml
     secrets: inherit
-    permission:
+    permissions:
       contents: write
       id-token: write
     with:
       base_branch: "reset-shared-staging"
       target_branch: "feat/shared-staging"
-      delete_base_branch: true
+      delete_branch: true
+  
