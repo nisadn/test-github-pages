@@ -1,0 +1,21 @@
+name: Auto Reset
+run-name: Reset test branch
+on:
+  push:
+    branches:
+      - 'feat/temp-auto-reset'
+
+jobs:
+  upsert_branch:
+    uses: ./.github/workflows/upsert-branch.yml
+    secrets: inherit
+    with:
+      target_branch: 'temp/reset-shared-staging'
+      base_branch: 'master'
+  force_push:
+    needs: upsert_branch
+    uses: ./.github/workflows/force-push.yml
+    secrets: inherit
+    with:
+      target_branch: 'feat/shared-staging'
+      base_branch: 'temp/reset-shared-staging'

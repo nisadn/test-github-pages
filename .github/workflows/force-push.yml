@@ -1,0 +1,66 @@
+name: Force Push Branch
+
+on:
+  workflow_call:
+    inputs:
+      base_branch:
+        description: 'Base branch'
+        required: true
+        default: 'master'
+        type: string
+      target_branch:
+        description: 'Target branch'
+        required: true
+        type: string
+    outputs:
+      force_push_result:
+        value: ${{ jobs.create_or_update_branch.outputs.force_push_result }}
+
+jobs:
+  create_or_update_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      force_push_result: ${{ steps.force_branch.outputs.result }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Force push branch
+        id: force_branch
+        run: |
+          TARGET_BRANCH=${{ inputs.target_branch }}
+          BASE_BRANCH=${{ inputs.base_branch }}
+          git fetch origin $BASE_BRANCH
+          git checkout $BASE_BRANCH
+
+          # Check if the branch already exists on the remote
+          BRANCH_EXISTS=$(git ls-remote --heads origin $TARGET_BRANCH)
+          MATCH_BRANCH_COUNT=$(echo "$BRANCH_EXISTS" | grep "refs/heads/$TARGET_BRANCH" || true)
+          echo "Count: $MATCH_BRANCH_COUNT"
+
+          if [ -n "$MATCH_BRANCH_COUNT" ]; then
+            echo "Branch $TARGET_BRANCH already exists. Updating the branch."
+            git branch -D $TARGET_BRANCH
+            git checkout -b $TARGET_BRANCH
+            git push -f origin $TARGET_BRANCH
+            echo "result=Forcely Pushed: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+          else
+            echo "Creating new branch $TARGET_BRANCH."
+            git checkout -b $TARGET_BRANCH
+            git push origin $TARGET_BRANCH
+            echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Delete temporary reset branch
+        uses: actions/github-script@v7
+        env:
+          RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.release_branches }}
+          RETAINED_BRANCH_COUNT: ${{ inputs.retained_branch_count }}
+        with:
+          script: |
+            BASE_BRANCH=${{ inputs.base_branch }}
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${BASE_BRANCH}`
+            });
+
+            echo "$BASE_BRANCH is successfully deleted"
