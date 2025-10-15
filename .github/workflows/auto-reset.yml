@@ -15,7 +15,7 @@ jobs:
     with:
       base_branch: "master"
       target_branch: "reset-shared-staging"
-      delete_branch: false
+      delete_base_branch: false
 
   reset_shared_staging:
     uses: ./.github/workflows/force-push.yml
@@ -28,5 +28,5 @@ jobs:
     with:
       base_branch: "reset-shared-staging"
       target_branch: "feat/shared-staging"
-      delete_branch: true
+      delete_base_branch: true
   
