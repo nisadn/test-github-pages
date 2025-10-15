@@ -6,10 +6,26 @@ on:
       - feat/test-auto-reset
 
 jobs:
-  test_echo:
+  create_reset_branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/test-echo
+      - uses: ./.github/actions/force-push
         with:
-          delete_branch: 'test/only'
+          base_branch: "master"
+          target_branch: "reset-shared-staging"
+  reset_shared_staging:
+    runs-on: ubuntu-latest
+    needs: create_reset_branch
+    environment: auto-reset
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upsert shared-staging branch
+        uses: ./.github/actions/force-push
+        with:
+          base_branch: "reset-shared-staging"
+          target_branch: "feat/shared-staging"
+      - name: Delete temporary reset branch
+        uses: ./.github/actions/delete-branch
+        with:
+          delete_branch: "reset-shared-staging"
