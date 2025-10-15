@@ -29,7 +29,6 @@ jobs:
   force:
     needs: upsert
     uses: ./.github/workflows/force-push.yml
-    environment: auto-reset
     secrets: inherit
     permissions:
       contents: write
