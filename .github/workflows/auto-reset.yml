@@ -7,7 +7,7 @@ on:
 
 jobs:
   create_reset_branch:
-    uses: ./.github/workflows/force-push.yml
+    uses: ./.github/workflows/reset-shared-staging.yml
     secrets: inherit
     permissions:
       contents: write
@@ -18,7 +18,7 @@ jobs:
       delete_base_branch: false
 
   reset_shared_staging:
-    uses: ./.github/workflows/force-push.yml
+    uses: ./.github/workflows/reset-shared-staging.yml
     needs: create_reset_branch
     # environment: auto-reset
     secrets: inherit
