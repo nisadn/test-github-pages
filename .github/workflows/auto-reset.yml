@@ -9,6 +9,9 @@ jobs:
   upsert_branch:
     uses: ./.github/workflows/upsert-branch.yml
     secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
     with:
       target_branch: 'temp/reset-shared-staging'
       base_branch: 'master'
