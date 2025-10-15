@@ -14,16 +14,18 @@ on:
         type: string
     outputs:
       force_push_result:
-        value: ${{ jobs.create_or_update_branch.outputs.force_push_result }}
+        value: ${{ jobs.force_push_branch.outputs.force_push_result }}
 
 jobs:
-  create_or_update_branch:
+  force_push_branch:
     runs-on: ubuntu-latest
     outputs:
       force_push_result: ${{ steps.force_branch.outputs.result }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Override git config
+        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Force push branch
         id: force_branch
         run: |

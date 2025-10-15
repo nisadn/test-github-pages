@@ -19,6 +19,9 @@ jobs:
     needs: upsert_branch
     uses: ./.github/workflows/force-push.yml
     secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
     with:
       target_branch: 'feat/shared-staging'
       base_branch: 'temp/reset-shared-staging'
