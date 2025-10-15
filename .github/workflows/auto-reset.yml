@@ -1,27 +1,39 @@
 name: Auto Reset
 run-name: Reset test branch
 on:
-  push:
-    branches:
-      - 'feat/temp-auto-reset'
+  workflow_dispatch:
+    inputs:
+      reset_branch:
+        description: 'Temporary Reset Branch'
+        required: true
+        type: string
+        default: 'reset-shared-staging'
+      shared_staging_branch:
+        description: 'Target Shared Staging Branch'
+        required: true
+        type: string
+        default: 'feat/shared-staging'
 
 jobs:
-  upsert_branch:
-    uses: ./.github/workflows/upsert-branch.yml
-    secrets: inherit
-    permissions:
-      contents: write
-      id-token: write
-    with:
-      target_branch: 'temp/reset-shared-staging'
-      base_branch: 'master'
-  force_push:
-    needs: upsert_branch
+  upsert:
     uses: ./.github/workflows/force-push.yml
     secrets: inherit
     permissions:
       contents: write
       id-token: write
     with:
-      target_branch: 'feat/shared-staging'
-      base_branch: 'temp/reset-shared-staging'
+      target_branch: ${{ inputs.reset_branch }}
+      base_branch: "master"
+      delete_branch: false
+
+  force:
+    needs: upsert
+    uses: ./.github/workflows/force-push.yml
+    secrets: inherit
+    permissions:
+      contents: write
+      id-token: write
+    with:
+      target_branch: ${{ inputs.reset_branch }}
+      base_branch: ${{ inputs.shared_staging_branch }}
+      delete_branch: true

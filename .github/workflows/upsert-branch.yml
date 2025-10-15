@@ -4,12 +4,12 @@ on:
   workflow_call:
     inputs:
       base_branch:
-        description: 'Base branch to create the new branch from'
+        description: "Base branch to create the new branch from"
         required: true
-        default: 'develop'
+        default: "develop"
         type: string
       target_branch:
-        description: 'Target branch to create or update'
+        description: "Target branch to create or update"
         required: true
         type: string
     outputs:
@@ -36,21 +36,7 @@ jobs:
           git fetch origin $BASE_BRANCH
           git checkout $BASE_BRANCH
 
-          # Check if the branch already exists on the remote
-          BRANCH_EXISTS=$(git ls-remote --heads origin $TARGET_BRANCH)
-          MATCH_BRANCH_COUNT=$(echo "$BRANCH_EXISTS" | grep "refs/heads/$TARGET_BRANCH" || true)
-          echo "Count: $MATCH_BRANCH_COUNT"
-
-          if [ -n "$MATCH_BRANCH_COUNT" ]; then
-            echo "Branch $TARGET_BRANCH already exists. Updating the branch."
-            git fetch origin $TARGET_BRANCH
-            git checkout $TARGET_BRANCH
-            git merge $BASE_BRANCH
-            git push origin $TARGET_BRANCH
-            echo "result=Branch Updated: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
-          else
-            echo "Creating new branch $TARGET_BRANCH."
-            git checkout -b $TARGET_BRANCH
-            git push origin $TARGET_BRANCH
-            echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
-          fi
+          echo "Creating new branch $TARGET_BRANCH."
+          git checkout -b $TARGET_BRANCH
+          git push origin $TARGET_BRANCH
+          echo "result=Newly Created: $TARGET_BRANCH" >> "$GITHUB_OUTPUT"
