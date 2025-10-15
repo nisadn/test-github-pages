@@ -9,6 +9,7 @@ jobs:
   test_echo:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/test-echo
         with:
           delete_branch: 'echo test only'
