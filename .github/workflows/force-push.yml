@@ -24,7 +24,6 @@ on:
 jobs:
   force_push_branch:
     runs-on: ubuntu-latest
-    environment: auto-reset
     outputs:
       force_push_result: ${{ steps.force_branch.outputs.result }}
     steps:
