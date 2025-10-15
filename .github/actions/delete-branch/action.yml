@@ -13,7 +13,7 @@ runs:
       with:
         script: |
           const branchToDelete = '${{ inputs.delete_branch }}';
-          if (branchToDelete != 'master' && !branchToDelete.startsWith('test/')) {
+          if (branchToDelete != 'test-only' && !branchToDelete.startsWith('test/')) {
             await github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
