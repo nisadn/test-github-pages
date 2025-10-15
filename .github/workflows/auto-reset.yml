@@ -30,6 +30,7 @@ jobs:
 
   force:
     uses: ./.github/workflows/force-push.yml
+    needs: upsert
     secrets: inherit
     permissions:
       contents: write
