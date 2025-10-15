@@ -27,13 +27,14 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
       - name: Force push to shared staging branch
         uses: ./.github/actions/force-push
         with:
           base_branch: "reset-shared-staging"
           target_branch: "feat/shared-staging"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v4
       - name: Delete reset branch
         uses: ./.github/actions/delete-branch
         with:
