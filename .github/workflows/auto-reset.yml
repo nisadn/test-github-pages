@@ -17,7 +17,6 @@ jobs:
       target_branch: "reset-shared-staging"
 
   update:
-    runs-on: ubuntu-latest
     environment: auto-reset
     needs: create
     uses: ./.github/workflows/force-push.yml
