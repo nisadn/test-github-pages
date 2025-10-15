@@ -8,11 +8,14 @@ on:
 jobs:
   create_reset_branch:
     runs-on: ubuntu-latest
-    uses: ./.github/actions/force-push
     secrets: inherit
-    with:
-      base_branch: "master"
-      target_branch: "reset-shared-staging"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create or Force Push reset branch
+        uses: ./.github/actions/force-push
+        with:
+          base_branch: "master"
+          target_branch: "reset-shared-staging"
   
   # waiting_per_approval:
   #   runs-on: ubuntu-latest
