@@ -20,7 +20,7 @@ jobs:
   reset_shared_staging:
     uses: ./.github/workflows/force-push.yml
     needs: create_reset_branch
-    environment: auto-reset
+    # environment: auto-reset
     secrets: inherit
     permissions:
       contents: write
