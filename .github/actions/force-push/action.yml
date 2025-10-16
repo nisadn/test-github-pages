@@ -2,7 +2,7 @@ name: 'Duplicate and Force Push Branch'
 inputs:
   base_branch:
     description: "Base branch"
-    required: trues
+    required: true
     type: string
   target_branch:
     description: "Target branch"

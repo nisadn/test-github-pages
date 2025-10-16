@@ -1,0 +1,44 @@
+name: Scheduled Create Reset Branch
+env:
+  RESET_BRANCH: 'chore/reset-shared-staging'
+  SHARED_STAGING_BRANCH: 'chore/shared-staging'
+on:
+  schedule:
+    - cron: '45 6 16 * 4'
+
+jobs:
+  create_reset_branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create temporary reset branch
+        uses: ./.github/actions/force-push
+        with:
+          base_branch: "master"
+          target_branch: $RESET_BRANCH
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # post_started:
+  #   runs-on: ubuntu-latest
+  #   needs: create_reset_branch
+  #   outputs:
+  #     thread_id: ${{ steps.start_reset_message_post.outputs.message_id }}
+  #   steps:
+  #     - name: Post to a Lark channel
+  #       uses: traveloka/act-devops-playground/.github/actions/post-to-lark@main
+  #       id: start_reset_message_post
+  #       with:
+  #         app_id: ${{ secrets.ASTUTI_LARK_APP_ID }}
+  #         app_secret: ${{ secrets.ASTUTI_LARK_APP_SECRET }}
+  #         channel_name: "adn-testing"
+  #         content: "{\"en_us\":{\"title\":\"Shared Staging Reset Started\",\"content\":[[{\"tag\":\"text\",\"text\":\"A temporary branch \"},{\"tag\":\"text\",\"text\":\"$RESET_BRANCH \",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\"has been created. Please push your latest changes to this branch \"},{\"tag\":\"text\",\"text\":\"within the next 24 hours.\",\"style\":[\"bold\"]}],[{\"tag\":\"text\",\"text\":\"\nAfter 1 day, this branch will be \"},{\"tag\":\"text\",\"text\":\"force-pushed \",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\"to replace the shared staging branch \"},{\"tag\":\"text\",\"text\":\"$SHARED_STAGING_BRANCH.\",\"style\":[\"bold\"]}]]}}"
+  #         content_type: "post"
+
+  auto_reset:
+    needs: create_reset_branch
+    uses: ./.github/workflows/auto-reset-shared-staging.yml
+    permissions:
+      contents: write
+  
