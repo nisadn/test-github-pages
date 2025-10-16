@@ -19,7 +19,7 @@ jobs:
       - name: Create temporary reset branch
         uses: ./.github/actions/force-push
         with:
-          base_branch: "develop"
+          base_branch: "master"
           target_branch: $RESET_BRANCH
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
