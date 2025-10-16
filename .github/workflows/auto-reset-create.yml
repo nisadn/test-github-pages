@@ -4,10 +4,7 @@ env:
   SHARED_STAGING_BRANCH: 'chore/shared-staging'
 on:
   schedule:
-    - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
-  push:
-    branches:
-      - chore/test-each-schedule
+    - cron: '45 6 16 * 4'
 
 jobs:
   create_reset_branch:
