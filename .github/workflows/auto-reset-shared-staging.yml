@@ -3,9 +3,10 @@ on:
   schedule:
     - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
   workflow_dispatch:
-  env:
-    RESET_BRANCH: 'reset-shared-staging'
-    SHARED_STAGING_BRANCH: 'feat/shared-staging'
+
+env:
+  RESET_BRANCH: 'reset-shared-staging'
+  SHARED_STAGING_BRANCH: 'feat/shared-staging'
 
 jobs:
   create_reset_branch:
