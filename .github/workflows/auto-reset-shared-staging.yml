@@ -33,7 +33,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const branchToDelete = '${{ process.env.RESET_BRANCH }}';
+            const branchToDelete = process.env.RESET_BRANCH;
             if (branchToDelete != 'develop' && !branchToDelete.startsWith('test/')) {
               await github.rest.git.deleteRef({
                 owner: context.repo.owner,
