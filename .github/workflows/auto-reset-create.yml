@@ -5,6 +5,7 @@ env:
 on:
   schedule:
     - cron: '45 6 16 * 4'
+  workflow_dispatch:
 
 jobs:
   create_reset_branch:
