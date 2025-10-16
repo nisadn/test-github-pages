@@ -2,9 +2,8 @@ name: 'Test Scheduled'
 env:
   RESET_BRANCH: 'this-is-a-branch'
 on:
-  push:
-    branches:
-      - test-echo
+  schedule:
+    - cron: '0 10 * * *' # testing dev branch
 
 jobs:
   testing:
