@@ -1,11 +1,14 @@
 name: 'Test Scheduled'
+env:
+  RESET_BRANCH: 'this-is-a-branch'
 on:
-  schedule:
-    - cron: '30 7 * * *'
+  push:
+    branches:
+      - test-echo
 
 jobs:
   testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "Hello World"
+      - run: echo "Hello World ${{ env.RESET_BRANCH }}"
