@@ -3,8 +3,8 @@ env:
   RESET_BRANCH: 'reset-shared-staging'
   SHARED_STAGING_BRANCH: 'feat/shared-staging'
 on:
-  schedule:
-    - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
+  # schedule:
+  #   - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
   workflow_dispatch:
 
 
@@ -18,8 +18,8 @@ jobs:
       - name: Create temporary reset branch
         uses: ./.github/actions/force-push
         with:
-          base_branch: "master"
-          target_branch: $RESET_BRANCH
+          # base_branch: "master"
+          # target_branch: $RESET_BRANCH
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # TODO: post to lark
@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/reset-shared-staging.yml
     permissions:
       contents: write
-    with:
-      base_branch: $RESET_BRANCH
-      target_branch: $SHARED_STAGING_BRANCH
+    # with:
+    #   base_branch: $RESET_BRANCH
+    #   target_branch: $SHARED_STAGING_BRANCH
   
