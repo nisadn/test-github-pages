@@ -42,4 +42,6 @@ jobs:
   auto_reset:
     needs: create_reset_branch
     uses: ./.github/workflows/auto-reset-shared-staging.yml
+    perrmissions:
+      contents: write
   
