@@ -36,10 +36,3 @@ jobs:
   #         channel_name: "adn-testing"
   #         content: "{\"en_us\":{\"title\":\"Shared Staging Reset Started\",\"content\":[[{\"tag\":\"text\",\"text\":\"A temporary branch \"},{\"tag\":\"text\",\"text\":\"$RESET_BRANCH \",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\"has been created. Please push your latest changes to this branch \"},{\"tag\":\"text\",\"text\":\"within the next 24 hours.\",\"style\":[\"bold\"]}],[{\"tag\":\"text\",\"text\":\"\nAfter 1 day, this branch will be \"},{\"tag\":\"text\",\"text\":\"force-pushed \",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\"to replace the shared staging branch \"},{\"tag\":\"text\",\"text\":\"$SHARED_STAGING_BRANCH.\",\"style\":[\"bold\"]}]]}}"
   #         content_type: "post"
-
-  auto_reset:
-    needs: create_reset_branch
-    uses: ./.github/workflows/auto-reset-shared-staging.yml
-    permissions:
-      contents: write
-  
