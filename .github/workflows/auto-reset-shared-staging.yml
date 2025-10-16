@@ -1,12 +1,11 @@
 name: Scheduled Reset Shared Staging
 env:
-  RESET_BRANCH: 'reset-shared-staging'
-  SHARED_STAGING_BRANCH: 'feat/shared-staging'
+  RESET_BRANCH: "reset-shared-staging"
+  SHARED_STAGING_BRANCH: "feat/shared-staging"
 on:
-  schedule:
-    - cron: '0 3 1-7 * 1' # At 10.00 AM (GMT+7) on every first Monday of the month
-  workflow_dispatch:
-
+  push:
+    branches:
+      - chore/test-env
 
 jobs:
   create_reset_branch:
@@ -19,7 +18,7 @@ jobs:
         uses: ./.github/actions/force-push
         with:
           base_branch: "master"
-          target_branch: $RESET_BRANCH
+          target_branch: ${{ env.RESET_BRANCH }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # TODO: post to lark
@@ -31,6 +30,5 @@ jobs:
     permissions:
       contents: write
     with:
-      base_branch: $RESET_BRANCH
-      target_branch: $SHARED_STAGING_BRANCH
-  
+      base_branch: ${{ env.RESET_BRANCH }}
+      target_branch: ${{ env.SHARED_STAGING_BRANCH }}
