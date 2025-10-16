@@ -3,9 +3,8 @@ env:
   RESET_BRANCH: 'chore/reset-shared-staging'
   SHARED_STAGING_BRANCH: 'chore/shared-staging'
 on:
-  # schedule:
-  #   - cron: '0 3 1-7 * 2' # At 10.00 AM (GMT+7) on every first Tuesday of the month
-  # workflow_dispatch:
+  schedule:
+    - cron: '0 3 1-7 * 2' # At 10.00 AM (GMT+7) on every first Tuesday of the month
   workflow_call:
 
 jobs:
