@@ -40,7 +40,6 @@ jobs:
   #         content_type: "post"
 
   auto_reset:
-    runs-on: ubuntu-latest
     needs: create_reset_branch
     uses: ./.github/workflows/auto-reset-shared-staging.yml
     permissions:
