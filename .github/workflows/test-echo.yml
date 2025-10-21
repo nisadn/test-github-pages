@@ -1,0 +1,12 @@
+name: Test Echo
+
+on: 
+  schedule:
+    - cron: '20 10 * 19-28 *'
+
+jobs:
+  echo_everyday:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Hello World
+        run: echo "Hello World"
