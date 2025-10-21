@@ -3,7 +3,7 @@ name: Test Echo Tuesday
 # https://superuser.com/questions/428807/run-a-cron-job-on-the-first-monday-of-every-month
 on:
   schedule:
-    - cron: '15 12 */32,19-28 * 2'
+    - cron: '30 9 */32,15-21 * 2'
 
 jobs:
   echo_everyday:

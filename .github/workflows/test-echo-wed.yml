@@ -1,0 +1,13 @@
+name: Test Echo Wednesday
+
+on:
+  schedule:
+    - cron: '30 9 */32,22-28 * 3'
+
+
+jobs:
+  echo_mon_wed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Hello World
+        run: echo "Hello World this is Wednesday"
