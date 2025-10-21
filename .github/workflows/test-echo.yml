@@ -1,8 +1,8 @@
-name: Test Echo
+name: Test Echo Everyday
 
-on: 
+on:
   schedule:
-    - cron: '20 10 * 19-28 *'
+    - cron: '30 3 19-28 * *'
 
 jobs:
   echo_everyday:
