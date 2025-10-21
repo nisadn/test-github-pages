@@ -2,7 +2,7 @@ name: Test Echo Everyday
 
 on:
   schedule:
-    - cron: '30 3 19-28 * *'
+    - cron: '0 4 19-28 * *'
 
 jobs:
   echo_everyday:
