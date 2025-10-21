@@ -1,8 +1,9 @@
 name: Test Echo Everyday
 
+# https://superuser.com/questions/428807/run-a-cron-job-on-the-first-monday-of-every-month
 on:
   schedule:
-    - cron: '0 4 19-28 * *'
+    - cron: '0 12 */32,19-28 * *'
 
 jobs:
   echo_everyday:
