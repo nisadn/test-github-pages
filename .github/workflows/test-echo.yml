@@ -1,13 +1,13 @@
-name: Test Echo Everyday
+name: Test Echo Tuesday
 
 # https://superuser.com/questions/428807/run-a-cron-job-on-the-first-monday-of-every-month
 on:
   schedule:
-    - cron: '0 12 */32,19-28 * *'
+    - cron: '15 12 */32,19-28 * 2'
 
 jobs:
   echo_everyday:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Hello World
-        run: echo "Hello World"
+        run: echo "Hello World Tuesday"
