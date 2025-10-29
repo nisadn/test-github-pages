@@ -18,7 +18,7 @@ jobs:
       - name: Force push to shared staging branch
         uses: ./.github/actions/force-push
         with:
-          base_branch: 'nothing'
+          base_branch: $RESET_BRANCH
           target_branch: $SHARED_STAGING_BRANCH
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
