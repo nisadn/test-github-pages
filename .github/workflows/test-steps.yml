@@ -1,0 +1,13 @@
+name: 'Test Steps Sequence Workflow'
+
+on:
+  push:
+    branches:
+      - chore/test-delete
+
+jobs:
+  test_steps_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Test Steps Action
+        uses: ./.github/actions/test-steps
