@@ -4,8 +4,11 @@ runs:
   using: 'composite'
   steps:
     - name: Step 1
+      shell: bash
       run: echo "This is step 1"
     - name: Simulate Error
+      shell: bash
       run: exit 1
     - name: Step 2
+      shell: bash
       run: echo "This is step 2"
