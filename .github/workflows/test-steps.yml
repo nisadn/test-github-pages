@@ -9,5 +9,6 @@ jobs:
   test_steps_job:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Execute Test Steps Action
         uses: ./.github/actions/test-steps
