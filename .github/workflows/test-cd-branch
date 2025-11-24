@@ -1,0 +1,11 @@
+name: test trigger on push
+
+on:
+  push:
+    branches:
+      - cd-test
+
+jobs:
+  echo_run:
+    runs-on: ubuntu-latest
+    run: echo "Running..."
