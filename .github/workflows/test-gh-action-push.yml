@@ -13,11 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT }}
-          fetch-depth: 0
-          ref: 'update-master'
-      
       - name: Create and push cd-test branch
         env:
           GH_TOKEN: ${{ secrets.PAT }}
@@ -27,6 +22,9 @@ jobs:
           # Configure git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin update-master
+          git checkout update-master
           
           # Check if branch exists remotely
           if git ls-remote --heads origin ${BRANCH_NAME} | grep -q ${BRANCH_NAME}; then
