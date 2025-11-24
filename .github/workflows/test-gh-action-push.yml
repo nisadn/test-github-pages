@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           fetch-depth: 0
-          ref: 'test-echo'
+          ref: 'master'
       
       - name: Create and push cd-test branch
         env:
