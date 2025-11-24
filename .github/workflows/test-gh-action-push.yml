@@ -7,10 +7,10 @@ on:
 
 jobs:
   echo_test:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Echo Test
-      run: echo "Running gh actionn push..."
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Test
+        run: echo "Running gh actionn push..."
 
   push_to_cd_branch:
     runs-on: ubuntu-latest
