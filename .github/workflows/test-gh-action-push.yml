@@ -42,9 +42,4 @@ jobs:
 
   call_workflow_cd_branch:
     needs: create_cd_test_branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Call Workflow CD Branch
-        uses: ./.github/workflows/test-cd-branch.yml
+    uses: ./.github/workflows/test-cd-branch.yml
