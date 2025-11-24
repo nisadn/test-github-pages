@@ -8,4 +8,6 @@ on:
 jobs:
   echo_run:
     runs-on: ubuntu-latest
-    run: echo "Running..."
+    steps:
+      - name: Echo Hello World
+        run: echo "Running CD..."
