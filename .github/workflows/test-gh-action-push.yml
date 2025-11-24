@@ -22,8 +22,8 @@ jobs:
       - name: push to cd branch
         run: | 
           echo "Push to CD branch"
-          git fetch origin master
-          git checkout master
+          git fetch origin test-echo
+          git checkout test-echo
           git checkout -b cd-test
           git push origin cd-test
 
