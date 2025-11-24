@@ -43,3 +43,6 @@ jobs:
           git push origin ${BRANCH_NAME}
           
           echo "Branch ${BRANCH_NAME} created and pushed successfully"
+
+      - name: Call Workflow A
+        uses: ./.github/workflows/workflow-a.yml

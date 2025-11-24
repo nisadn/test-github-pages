@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - cd-test
+  workflow_call:
 
 jobs:
   echo_something:
