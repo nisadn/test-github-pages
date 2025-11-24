@@ -28,4 +28,6 @@ push_to_cd_branch:
 echo_finish:
   runs-on: ubuntu-latest
   needs: push_to_cd_branch
-  run: echo "Finish workflow"
+  steps:
+    - name: Echo Finish
+      run: echo "Finished."
