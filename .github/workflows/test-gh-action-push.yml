@@ -29,13 +29,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           BRANCH_NAME="cd-test"
-
+          COMMIT_SHA=$(gh api repos/${{ github.repository }}/git/ref/heads/test-echo --jq '.object.sha')
+          
           echo "Creating branch '$BRANCH_NAME'"
 
           # Create the new branch using the GitHub API
           gh api repos/${{ github.repository }}/git/refs \
             -X POST \
-            -F ref=refs/heads/${BRANCH_NAME}
+            -F ref=refs/heads/${BRANCH_NAME} \
+            -F sha=${COMMIT_SHA}
 
           echo "Branch ${BRANCH_NAME} created successfully"
 
