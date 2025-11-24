@@ -1,0 +1,13 @@
+name: Workflow A
+
+on:
+  push:
+    branches:
+      - cd-test
+
+jobs:
+  echo_something:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Something
+        run: echo "Workflow A triggered! Hello from cd-test branch"
