@@ -18,15 +18,18 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Get GH App
+        id: generate-token
+        uses: actions/create-github-app-token@v2
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
           repository: ${{ github.repository }}
           fetch-depth: 0
           ref: 'test-echo'
       - name: Create new branch
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           BRANCH_NAME="cd-test"
           COMMIT_SHA=$(gh api repos/${{ github.repository }}/git/ref/heads/test-echo --jq '.object.sha')
