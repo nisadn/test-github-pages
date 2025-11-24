@@ -19,15 +19,25 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Override git config
-        run: git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
-      - name: push to cd branch
-        run: | 
-          echo "Push to CD branch"
-          git fetch origin test-echo
-          git checkout test-echo
-          git checkout -b cd-test
-          git push origin cd-test
+        with:
+          # token: ${{ steps.generate-token.outputs.token }}
+          repository: ${{ github.repository }}
+          fetch-depth: 0
+          ref: 'test-echo'
+      - name: Create new branch
+        # env:
+        #   GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          BRANCH_NAME="cd-test"
+
+          echo "Creating branch '$BRANCH_NAME'"
+
+          # Create the new branch using the GitHub API
+          gh api repos/${{ github.repository }}/git/refs \
+            -X POST \
+            -F ref=refs/heads/${BRANCH_NAME}
+
+          echo "Branch ${BRANCH_NAME} created successfully"
 
   echo_finish:
     runs-on: ubuntu-latest
