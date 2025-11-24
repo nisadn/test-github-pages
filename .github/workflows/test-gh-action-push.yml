@@ -13,7 +13,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Create and push cd-test branch
         env:
           GH_TOKEN: ${{ secrets.PAT }}
@@ -41,5 +40,11 @@ jobs:
           
           echo "Branch ${BRANCH_NAME} created and pushed successfully"
 
-      - name: Call Workflow A
+  call_workflow_cd_branch:
+    needs: create_cd_test_branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Call Workflow CD Branch
         uses: ./.github/workflows/test-cd-branch.yml
