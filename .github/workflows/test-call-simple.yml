@@ -1,4 +1,6 @@
 name: "Call Simple Workflow"
+env:
+  BRANCH: 'cd-test'
 
 on:
   workflow_dispatch:
@@ -17,5 +19,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'simple.yml',
-              ref: 'refs/heads/cd-test'
+              ref: `refs/heads/${process.env.BRANCH}`,
             });
