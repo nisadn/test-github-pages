@@ -1,0 +1,11 @@
+name: "Call Simple Workflow"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call_simple_workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Simple Workflow
+        uses: ./.github/workflows/simple.yml
