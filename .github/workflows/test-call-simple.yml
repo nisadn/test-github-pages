@@ -5,8 +5,4 @@ on:
 
 jobs:
   call_simple_workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Call Simple Workflow
-        uses: ./.github/workflows/simple.yml
+    uses: ./.github/workflows/simple.yml
