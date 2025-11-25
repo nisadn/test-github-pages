@@ -5,10 +5,18 @@ on:
     branches:
       - cd-test
   workflow_call:
+  workflow_dispatch:
+    inputs:
+      ROLLBACK_REGIONS:
+        description:
+          Json array of the regions to rollback. For example "['ap-southeast-1',
+          'ap-southeast-2']".
+        default: "['ap-southeast-1']"
+        type: string
 
 jobs:
   echo_run:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Hello World
-        run: echo "Running CD..."
+      - name: Echo Test Input
+        run: echo "Rollback regions: ${{ inputs.ROLLBACK_REGIONS }}"
