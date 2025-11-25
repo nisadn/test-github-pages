@@ -41,6 +41,7 @@ jobs:
           echo "Branch ${BRANCH_NAME} created and pushed successfully"
 
   call_workflow_cd_branch:
+    runs-on: ubuntu-latest
     needs: create_cd_test_branch
     steps:
       - uses: actions/checkout@v4
