@@ -1,0 +1,34 @@
+name: Test Push Commit
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: "Name of the branch to create and push"
+        default: "cd-test"
+      commit_message:
+        description: "Commit message for the new commit"
+        default: "Automated commit"
+
+jobs:
+  push_commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create and push new branch with commit
+        env:
+          BRANCH_NAME: ${{ inputs.branch_name }}
+          COMMIT_MESSAGE: ${{ inputs.commit_message }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create a new branch
+          git fetch origin $BRANCH_NAME
+          git checkout $BRANCH_NAME
+
+          # Stage, commit, and push the changes
+          git commit -m "$COMMIT_MESSAGE" --allow-empty
+          git push origin $BRANCH_NAME
