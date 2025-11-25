@@ -2,6 +2,11 @@ name: "Simple Workflow"
 
 on:
   workflow_call:
+    inputs:
+      checkout_branch:
+        description: "Branch to deploy"
+        default: "master"
+        type: string
   workflow_dispatch:
     inputs:
       checkout_branch:
