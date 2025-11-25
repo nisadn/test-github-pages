@@ -17,5 +17,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'simple.yml',
-              ref: 'heads/cd-test'
+              ref: 'refs/heads/cd-test'
             });
