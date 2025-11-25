@@ -3,16 +3,14 @@ name: "Simple Workflow"
 on:
   workflow_call:
     inputs:
-      checkout_branch:
+      branch:
         description: "Branch to deploy"
-        required: true
         default: "master"
         type: string
   workflow_dispatch:
     inputs:
-      checkout_branch:
+      branch:
         description: "Branch to deploy"
-        required: true
         default: "master"
         type: string
 
@@ -22,5 +20,5 @@ jobs:
     steps:
       - name: Test echo
         run: |
-          echo "This is a simple job running on branch: ${{ github.event.inputs.checkout_branch }}"
+          echo "testtt: ${{ inputs.branch }}"
           echo "Job completed successfully!"

@@ -41,4 +41,4 @@ jobs:
           echo "Branch ${BRANCH_NAME} created and pushed successfully"
 
   call_workflow_cd_branch:
-    uses: ./.github/workflows/test-cd-branch.yml
+    uses: ./.github/workflows/simple.yml
