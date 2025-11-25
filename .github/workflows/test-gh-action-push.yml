@@ -42,4 +42,7 @@ jobs:
 
   call_workflow_cd_branch:
     needs: create_cd_test_branch
-    uses: ./.github/workflows/test-cd-branch.yml
+    steps:
+      - uses: actions/checkout@v4
+      - name: Call Workflow CD branch
+        uses: ./.github/workflows/test-cd-branch.yml
