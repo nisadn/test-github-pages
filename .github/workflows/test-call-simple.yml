@@ -7,4 +7,4 @@ jobs:
   call_simple_workflow:
     uses: ./.github/workflows/simple.yml
     with:
-      checkout_branch: "{\"en_us\":{\"title\":\"[ASTFE] Reset Branch Created\",\"content\":[[{\"tag\":\"text\",\"text\":\"Hi \"},{\"tag\":\"at\",\"user_id\":\"all\"},{\"tag\":\"text\",\"text\":\" it\'s time to reset our shared staging branch. Please cherry-pick your changes to \"},{\"tag\":\"text\",\"text\":\"RESET_BRANCH\",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\" before \"},{\"tag\":\"text\",\"text\":\"tomorrow 12 PM (GMT+7)\",\"style\":[\"bold\"]},{\"tag\":\"emotion\",\"emoji_type\":\"Alarm\"}]]}}"
+      checkout_branch: "{\"en_us\":{\"title\":\"[ASTFE] Reset Branch Created\",\"content\":[[{\"tag\":\"text\",\"text\":\"Hi \"},{\"tag\":\"at\",\"user_id\":\"all\"},{\"tag\":\"text\",\"text\":\" it\\'s time to reset our shared staging branch. Please cherry-pick your changes to \"},{\"tag\":\"text\",\"text\":\"RESET_BRANCH\",\"style\":[\"bold\"]},{\"tag\":\"text\",\"text\":\" before \"},{\"tag\":\"text\",\"text\":\"tomorrow 12 PM (GMT+7)\",\"style\":[\"bold\"]},{\"tag\":\"emotion\",\"emoji_type\":\"Alarm\"}]]}}"
