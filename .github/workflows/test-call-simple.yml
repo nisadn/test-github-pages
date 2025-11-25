@@ -4,12 +4,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout_some_branch:
-    uses: actions/checkout@v4
-    with:
-      ref: refs/heads/cd-test
-      
-  call_simple_workflow:
-    uses: ./.github/workflows/simple.yml
-    with:
-      checkout_branch: ${{ github.ref }}
+  trigger_workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger workflow simple.yml on cd-test branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'simple.yml',
+              ref: 'heads/cd-test'
+            });
