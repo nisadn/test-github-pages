@@ -26,4 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Test Input
-        run: echo "Rollback regions: ${{ inputs.ROLLBACK_REGIONS }}"
+        run: echo "Rollback regions: ${{ github.event.inputs.ROLLBACK_REGIONS }}"
