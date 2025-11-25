@@ -5,6 +5,13 @@ on:
     branches:
       - cd-test
   workflow_call:
+    inputs:
+      ROLLBACK_REGIONS:
+        description:
+          Json array of the regions to rollback. For example "['ap-southeast-1',
+          'ap-southeast-2']".
+        default: "['ap-southeast-1']"
+        type: string
   workflow_dispatch:
     inputs:
       ROLLBACK_REGIONS:
