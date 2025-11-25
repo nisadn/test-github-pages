@@ -6,3 +6,5 @@ on:
 jobs:
   call_simple_workflow:
     uses: ./.github/workflows/simple.yml
+    with:
+      checkout_branch: "test, it's simple string"
