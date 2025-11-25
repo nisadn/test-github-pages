@@ -3,15 +3,15 @@ name: "Simple Workflow"
 on:
   workflow_call:
     inputs:
-      branch:
-        description: "Branch to deploy"
-        default: "master"
+      text:
+        description: "text"
+        default: "nothing"
         type: string
   workflow_dispatch:
     inputs:
-      branch:
-        description: "Branch to deploy"
-        default: "master"
+      text:
+        description: "text"
+        default: "nothing"
         type: string
 
 jobs:
@@ -20,5 +20,5 @@ jobs:
     steps:
       - name: Test echo
         run: |
-          echo "testtt: ${{ inputs.branch }}"
+          echo "text: ${{ inputs.text }}"
           echo "Job completed successfully!"
