@@ -45,5 +45,7 @@ jobs:
     needs: create_cd_test_branch
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.ref }}
       - name: Call Workflow CD branch
         uses: ./.github/workflows/test-cd-branch.yml
