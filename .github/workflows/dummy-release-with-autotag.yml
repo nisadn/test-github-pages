@@ -1,0 +1,18 @@
+name: Release with Autotag
+
+on:
+  workflow_dispatch:
+
+jobs:
+  need-approval:
+    env: dummy-release
+    name: "Need approval to run autotag workflow"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This is a dummy release workflow that needs approval to run the autotag workflow. Please approve to proceed."
+
+  call-autotag:
+    needs: need-approval
+    uses: ./.github/workflows/autotag-release.yml
+    permissions:
+      contents: write
