@@ -1,0 +1,95 @@
+name: 🏷️ Auto tag and delete release branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      retained_branch_count:
+        description: "Count of branches to retain"
+        type: number
+        default: 4
+
+jobs:
+  get-release-branch:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/release/')
+    outputs:
+      release_branches: ${{ steps.get_all_release_branch.outputs.release_branches }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get All Release Version
+        id: get_all_release_branch
+        run: |
+          # Fetch all branches
+          git fetch --all
+
+          # Get the latest release branch with pattern release/[number].[number].[number]
+          RELEASE_BRANCHES=$(git branch -r | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
+          echo "Branches $RELEASE_BRANCHES"
+          RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          echo "release_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
+  autotag:
+    runs-on: ubuntu-latest
+    needs: get-release-branch
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: "yarn"
+      - name: Create tag and delete branch
+        uses: actions/github-script@v7
+        env:
+          RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.release_branches }}
+          RETAINED_BRANCH_COUNT: ${{ inputs.retained_branch_count }}
+        with:
+          script: |
+            const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT } = process.env;
+            const releaseBranches = RELEASE_BRANCHES.split('   ');
+            console.log('Release Branch', releaseBranches);
+
+            // Create tags for the old branches
+            for (let i = 0; i < releaseBranches.length; i++) {
+              const oldBranch = releaseBranches[i];
+
+              // Create a tag for the old branch
+              const oldTag = `v${oldBranch.replace('release/', '')}`;
+              try {
+                // Try to get the tag
+                await github.rest.git.getRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: `tags/${oldTag}`
+                })
+
+                console.log(`Tag ${oldTag} already exists.`);
+              } catch (error) {
+                // If the tag does not exist, create it
+                if (error.status === 404) {
+                  console.log(`Creating tag ${oldTag}`);
+
+                  const branch = await github.rest.repos.getBranch({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    branch: oldBranch
+                  })
+
+                  await github.rest.git.createRef({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    ref: `refs/tags/${oldTag}`,
+                    sha: branch.data.commit.sha
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }
+  cleanup-release-branch:
+    name: Cleanup Old Release Branches (Dummy)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cleanup Old Release Branches (Dummy)
+        run: echo "This is a dummy step for cleanup old release branches. Actual deletion is not implemented in this workflow."

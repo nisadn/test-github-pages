@@ -1,8 +1,6 @@
 name: Test needs
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   deps_a:
