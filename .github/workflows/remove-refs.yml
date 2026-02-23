@@ -15,25 +15,42 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Remove refs with specified prefix
+        uses: actions/github-script@v7
         env:
           PREFIX: ${{ github.event.inputs.prefix }}
-        run: |
-          echo "Removing refs with prefix: $PREFIX"
-          git fetch --all
-          refs_to_remove=$(git branch -r | grep "origin/$PREFIX")
-
-          if [ -z "$refs_to_remove" ]; then
-            echo "No refs found with prefix '$PREFIX'."
-            exit 0
-          fi
-
-          echo "Refs to remove:"
-          echo "$refs_to_remove"
-
-          for ref in $refs_to_remove; do
-              await github.rest.git.deleteRef({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                ref: `${ref}`
-              });
-          done
+        with:
+          script: |
+            const { PREFIX } = process.env;
+            console.log(`Removing refs with prefix: ${PREFIX}`);
+            
+            // Get all refs
+            const { data: refs } = await github.rest.git.listMatchingRefs({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${PREFIX}`
+            });
+            
+            if (refs.length === 0) {
+              console.log(`No refs found with prefix '${PREFIX}'.`);
+              return;
+            }
+            
+            console.log("Refs to remove:");
+            refs.forEach(ref => console.log(ref.ref));
+            
+            // Delete each ref
+            for (const ref of refs) {
+              const refName = ref.ref.replace('refs/', '');
+              console.log(`Deleting ref: ${refName}`);
+              
+              try {
+                await github.rest.git.deleteRef({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: refName
+                });
+                console.log(`✅ Deleted: ${refName}`);
+              } catch (error) {
+                console.log(`❌ Failed to delete ${refName}: ${error.message}`);
+              }
+            }
