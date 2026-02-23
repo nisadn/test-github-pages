@@ -1,6 +1,6 @@
 name: "Call Simple Workflow"
 env:
-  BRANCH: 'cd-test'
+  BRANCH: "cd-test"
 
 on:
   workflow_dispatch:
@@ -23,5 +23,3 @@ jobs:
       #       });
       - name: Workflow call autotag-release.yml
         uses: ./.github/workflows/autotag-release.yml
-        permissions:
-          contents: write
