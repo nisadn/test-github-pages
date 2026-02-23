@@ -89,7 +89,7 @@ jobs:
             }
   cleanup-release-branch:
     name: Cleanup Old Release Branches (Dummy)
-    uses: /.github/workflows/cleanup-release-branch.yml
+    uses: ./.github/workflows/cleanup-release-branch.yml
     with:
       BRANCH_LIMIT: ${{ inputs.retained_branch_count }}
     secrets: inherit
