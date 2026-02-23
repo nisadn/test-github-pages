@@ -2,15 +2,17 @@ name: Branch Retention Check
 
 on:
   workflow_dispatch:
+  schedule:
+    # Run weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
 
 jobs:
   calculate-retention:
     runs-on: ubuntu-latest
     outputs:
-      total-branches-to-retain: ${{ steps.calculate.outputs.total-branches }}
-      must-retain-branches: ${{ steps.calculate.outputs.must-retain-branches }}
-      branches-to-retain: ${{ steps.calculate.outputs.branches-to-retain }}
-
+      branches-to-remove: ${{ steps.calculate.outputs.branches-to-remove }}
+      total-branches-to-retain: ${{ steps.calculate.outputs.total-retained }}
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,121 +20,57 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Fetch all branches
-        run: |
-          git fetch --all
-          git branch -r --format="%(refname:short)" | grep "origin/release/" | sed 's/origin\///' > all_release_branches.txt
-
       - name: Calculate retention strategy
         id: calculate
         run: |
-          # Get all release branches sorted by creation date (oldest first)
-          echo "Getting all release branches..."
-          git for-each-ref --sort=committerdate --format="%(refname:short)" refs/remotes/origin/release/ | sed 's/origin\///' > branches_by_date.txt
-
-          echo "All release branches (from oldest to newest):"
-          cat branches_by_date.txt
-
-          # Extract standard format branches (release/X.Y.Z)
-          echo "Extracting standard format branches..."
-          grep -E '^release/[0-9]+\.[0-9]+\.[0-9]+$' branches_by_date.txt > standard_branches.txt || true
-
-          echo "Standard format branches:"
-          cat standard_branches.txt
-
-          # Get the 4 newest standard branches
-          echo "Getting 4 newest standard branches..."
-          tail -n 4 standard_branches.txt > newest_4_standard.txt
-
-          echo "4 newest standard branches:"
-          cat newest_4_standard.txt
-
-          # Find the 4th newest (oldest of the 4 newest) standard branch
-          if [ -s newest_4_standard.txt ]; then
-            CUTOFF_BRANCH=$(head -n 1 newest_4_standard.txt)
-            echo "Cutoff branch: $CUTOFF_BRANCH"
-            
-            # Get the commit date of the cutoff branch
+          # Fetch all release branches sorted by date (newest first)
+          git fetch --all
+          ALL_BRANCHES=$(git for-each-ref --sort=-committerdate --format="%(refname:short)" refs/remotes/origin/release/ | sed 's/origin\///')
+          
+          # Find the 4th newest standard format branch as cutoff point
+          CUTOFF_BRANCH=$(echo "$ALL_BRANCHES" | grep -E '^release/[0-9]+\.[0-9]+\.[0-9]+$' | head -4 | tail -1)
+          
+          if [ -n "$CUTOFF_BRANCH" ]; then
             CUTOFF_DATE=$(git log -1 --format="%ct" "origin/$CUTOFF_BRANCH")
-            echo "Cutoff date: $CUTOFF_DATE"
+            BRANCHES_TO_REMOVE=""
+            RETAINED_COUNT=0
             
-            # Find all branches (including non-standard) that are newer than or equal to the cutoff date
-            echo "Finding all branches to retain..."
-            > branches_to_retain.txt
-            while IFS= read -r branch; do
-              if [ -n "$branch" ]; then
-                BRANCH_DATE=$(git log -1 --format="%ct" "origin/$branch" 2>/dev/null || echo "0")
-                if [ "$BRANCH_DATE" -ge "$CUTOFF_DATE" ]; then
-                  echo "$branch" >> branches_to_retain.txt
-                fi
+            for branch in $ALL_BRANCHES; do
+              BRANCH_DATE=$(git log -1 --format="%ct" "origin/$branch" 2>/dev/null || echo "0")
+              if [ "$BRANCH_DATE" -ge "$CUTOFF_DATE" ]; then
+                RETAINED_COUNT=$((RETAINED_COUNT + 1))
+              else
+                BRANCHES_TO_REMOVE="$BRANCHES_TO_REMOVE$branch "
               fi
-            done < branches_by_date.txt
-            
-            # Also include the 4 newest standard branches in must-retain list
-            cp newest_4_standard.txt must_retain_branches.txt
+            done
           else
-            echo "No standard format branches found"
-            cp branches_by_date.txt branches_to_retain.txt
-            cp branches_by_date.txt must_retain_branches.txt
+            # Fallback: if no standard branches found, retain all
+            BRANCHES_TO_REMOVE=""
+            RETAINED_COUNT=$(echo "$ALL_BRANCHES" | wc -l)
           fi
-
-          echo "Branches to retain:"
-          cat branches_to_retain.txt
-
-          echo "Must-retain branches (4 newest standard):"
-          cat must_retain_branches.txt
-
-          # Count total branches to retain
-          TOTAL_COUNT=$(wc -l < branches_to_retain.txt)
-          echo "Total branches to retain: $TOTAL_COUNT"
-
-          # Format outputs for GitHub Actions
-          BRANCHES_TO_RETAIN=$(cat branches_to_retain.txt | tr '\n' ',' | sed 's/,$//')
-          MUST_RETAIN_BRANCHES=$(cat must_retain_branches.txt | tr '\n' ',' | sed 's/,$//')
-
-          # Set outputs
-          echo "total-branches=$TOTAL_COUNT" >> $GITHUB_OUTPUT
-          echo "branches-to-retain=$BRANCHES_TO_RETAIN" >> $GITHUB_OUTPUT
-          echo "must-retain-branches=$MUST_RETAIN_BRANCHES" >> $GITHUB_OUTPUT
-
-          # Also create a summary for the job
-          echo "## Branch Retention Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Total branches to retain:** $TOTAL_COUNT" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Must-retain branches (4 newest standard):**" >> $GITHUB_STEP_SUMMARY
-          while IFS= read -r branch; do
-            if [ -n "$branch" ]; then
-              echo "- $branch" >> $GITHUB_STEP_SUMMARY
-            fi
-          done < must_retain_branches.txt
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**All branches to retain:**" >> $GITHUB_STEP_SUMMARY
-          while IFS= read -r branch; do
-            if [ -n "$branch" ]; then
-              echo "- $branch" >> $GITHUB_STEP_SUMMARY
-            fi
-          done < branches_to_retain.txt
+          
+          # Clean up and format output
+          BRANCHES_TO_REMOVE=$(echo "$BRANCHES_TO_REMOVE" | tr ' ' '\n' | grep -v '^$')
+          
+          echo "branches-to-remove=$(echo "$BRANCHES_TO_REMOVE" | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+          echo "total-retained=$RETAINED_COUNT" >> $GITHUB_OUTPUT
+          
+          echo "Branches to remove: $(echo "$BRANCHES_TO_REMOVE" | tr '\n' ' ')"
+          echo "Total branches to retain: $RETAINED_COUNT"
 
       - name: Display results
         run: |
-          echo "=== BRANCH RETENTION RESULTS ==="
-          echo "Total branches to retain: ${{ steps.calculate.outputs.total-branches }}"
-          echo ""
-          echo "Must-retain branches: ${{ steps.calculate.outputs.must-retain-branches }}"
-          echo ""
-          echo "All branches to retain: ${{ steps.calculate.outputs.branches-to-retain }}"
+          echo "Branches to remove: ${{ steps.calculate.outputs.branches-to-remove }}"
+          echo "Total branches to retain: ${{ steps.calculate.outputs.total-retained }}"
 
   # Example job that uses the retention data
   cleanup-example:
     needs: calculate-retention
     runs-on: ubuntu-latest
-    if: false # Set to true to enable this example job
-
+    if: false  # Set to true to enable this example job
+    
     steps:
       - name: Use retention data
         run: |
-          echo "This job would use the retention data:"
-          echo "Total: ${{ needs.calculate-retention.outputs.total-branches-to-retain }}"
-          echo "Must-retain: ${{ needs.calculate-retention.outputs.must-retain-branches }}"
-          echo "All to retain: ${{ needs.calculate-retention.outputs.branches-to-retain }}"
+          echo "Branches to remove: ${{ needs.calculate-retention.outputs.branches-to-remove }}"
+          echo "Total branches to retain: ${{ needs.calculate-retention.outputs.total-branches-to-retain }}"
