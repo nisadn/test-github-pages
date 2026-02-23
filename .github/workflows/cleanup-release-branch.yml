@@ -24,7 +24,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           BRANCH_LIMIT: ${{ inputs.BRANCH_LIMIT }}
-          REPO_NAME: ${{ inputs.REPO_NAME }}
+          REPO_NAME: ${{ github.repository }}
         run: |
           branch_limit="$BRANCH_LIMIT"
           echo "Keeping $branch_limit most recent release branches"

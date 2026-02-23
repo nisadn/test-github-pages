@@ -54,7 +54,7 @@ jobs:
               const oldBranch = releaseBranches[i];
 
               // Create a tag for the old branch
-              const oldTag = `v${oldBranch.replace('release/', '')}`;
+              const oldTag = oldBranch;
               try {
                 // Try to get the tag
                 await github.rest.git.getRef({
