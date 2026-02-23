@@ -29,7 +29,7 @@ jobs:
           git fetch --all
 
           # Get all release branches
-          RELEASE_BRANCHES=$(git branch -r | grep 'origin/release/' | sed 's|origin/||' | sort -V)
+          RELEASE_BRANCHES=$(git branch -r --sort=-committerdate | grep 'origin/release/' | sed 's|origin/||')
           echo "Branches $RELEASE_BRANCHES"
           RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "release_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
@@ -106,4 +106,4 @@ jobs:
     name: Dummy cleanup job
     steps:
       - name: Dummy step
-        run: echo "This is a placeholder for the actual cleanup job that would delete old release
+        run: echo "This is a placeholder for the actual cleanup job that would delete old release"
