@@ -1,0 +1,37 @@
+name: Test needs
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deps_a:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Throw error
+        run: exit 1
+  deps_b:
+    runs-on: ubuntu-latest
+    needs: deps_a
+    if: ${{ always() }}
+    steps:
+      - name: Check if deps_a failed
+        run: |
+          if [ "${{ needs.deps_a.result }}" == "failure" ]; then
+            echo "deps_a failed as expected"
+          else
+            echo "deps_a did not fail as expected"
+            exit 1
+          fi
+  deps_c:
+    runs-on: ubuntu-latest
+    needs: deps_a
+    steps:
+      - name: Check if deps_a failed
+        run: |
+          if [ "${{ needs.deps_a.result }}" == "failure" ]; then
+            echo "deps_a failed as expected"
+          else
+            echo "deps_a did not fail as expected"
+            exit 1
+          fi
