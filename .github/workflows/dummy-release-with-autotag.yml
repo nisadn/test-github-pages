@@ -6,11 +6,12 @@ on:
 jobs:
   need-approval:
     name: "Need approval to run autotag workflow"
+    environment:
+      name: "dummy-release"
     runs-on: ubuntu-latest
     steps:
       - name: Awaiting approval
         run: echo "This is a dummy release workflow that needs approval to run the autotag workflow. Please approve to proceed."
-        env: dummy-release
 
   call-autotag:
     needs: need-approval
