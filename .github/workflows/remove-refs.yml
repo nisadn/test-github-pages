@@ -27,7 +27,7 @@ jobs:
             const { data: refs } = await github.rest.git.listMatchingRefs({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: `heads/${PREFIX}`
+              ref: `origin/${PREFIX}`
             });
             
             if (refs.length === 0) {
