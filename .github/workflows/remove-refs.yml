@@ -17,12 +17,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Remove refs with specified prefix
+        id: get-branches
         env:
           PREFIX: ${{ github.event.inputs.prefix }}
         run: |
           echo "Removing refs with prefix: $PREFIX"
           git fetch --all
-          refs_to_remove=$(git branch -r | grep "origin/$PREFIX")
+          refs_to_remove=$(git branch -r | grep "origin/$PREFIX" | sed 's|origin/||')
 
           if [ -z "$refs_to_remove" ]; then
             echo "No refs found with prefix '$PREFIX'."
@@ -32,7 +33,23 @@ jobs:
           echo "Refs to remove:"
           echo "$refs_to_remove"
 
-          for ref in $refs_to_remove; do
-            echo "Deleting ref: $ref"
-            git push origin --delete "$ref"
-          done
+          // set to output for next step
+          echo "refs_to_remove=$(echo "$refs_to_remove" | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Delete Branch
+        uses: actions/github-script@v7
+        env:
+          REFS_TO_REMOVE: ${{ steps.get-branches.outputs.refs_to_remove }}
+        with:
+          script: |
+            const branchToDelete = process.env.REFS_TO_REMOVE;
+            if (branchToDelete != 'develop' && !branchToDelete.startsWith('test/')) {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branchToDelete}`
+              });
+              console.log('Delete branch', branchToDelete);
+            } else {
+              core.setFailed('Refusing to delete branch: ' + branchToDelete);
+            }
