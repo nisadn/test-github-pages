@@ -1,0 +1,39 @@
+name: Remove refs
+
+on:
+  workflow_dispatch:
+    inputs:
+      prefix:
+        description: "Prefix of refs to remove (e.g., 'release/')"
+        required: true
+        default: "release/"
+
+jobs:
+  remove-refs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Remove refs with specified prefix
+        env:
+          PREFIX: ${{ github.event.inputs.prefix }}
+        run: |
+          echo "Removing refs with prefix: $PREFIX"
+          git fetch --all
+          refs_to_remove=$(git branch -r | grep "origin/$PREFIX")
+
+          if [ -z "$refs_to_remove" ]; then
+            echo "No refs found with prefix '$PREFIX'."
+            exit 0
+          fi
+
+          echo "Refs to remove:"
+          echo "$refs_to_remove"
+
+          for ref in $refs_to_remove; do
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `${ref}`
+              });
+          done
