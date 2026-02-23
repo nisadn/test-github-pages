@@ -11,7 +11,6 @@ on:
 jobs:
   get-release-branch:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release/')
     outputs:
       release_branches: ${{ steps.get_all_release_branch.outputs.release_branches }}
     steps:
@@ -89,6 +88,7 @@ jobs:
             }
   cleanup-release-branch:
     name: Cleanup Old Release Branches (Dummy)
+    needs: autotag
     uses: ./.github/workflows/cleanup-release-branch.yml
     with:
       BRANCH_LIMIT: ${{ inputs.retained_branch_count }}
