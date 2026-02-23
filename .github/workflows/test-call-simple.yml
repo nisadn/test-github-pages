@@ -10,17 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       actions: write
-    steps:
-      # - name: Trigger workflow simple.yml on cd-test branch
-      #   uses: actions/github-script@v7
-      #   with:
-      #     script: |
-      #       await github.rest.actions.createWorkflowDispatch({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         workflow_id: 'simple.yml',
-      #         ref: `refs/heads/${process.env.BRANCH}`,
-      #       });
-      - uses: actions/checkout@v4
-      - name: Workflow call autotag-release.yml
-        uses: ./.github/workflows/autotag-release.yml
+    uses: ./.github/workflows/autotag-release.yml
