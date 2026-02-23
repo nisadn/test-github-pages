@@ -16,7 +16,3 @@ jobs:
         run: |
           echo "This is a simple job running with ref: ${{ github.ref }}, checkout branch: ${{ inputs.checkout_branch }}"
           echo "Job completed successfully!"
-      - name: Test workflow_call
-        uses: ./.github/workflows/autotag-release.yml
-        permissions:
-          contents: write
