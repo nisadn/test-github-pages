@@ -1,0 +1,54 @@
+name: Cleanup Release Branches
+
+on:
+  workflow_call:
+    inputs:
+      BRANCH_LIMIT:
+        type: string
+        description: "The maximum number of release branches to keep"
+        default: "2"
+        required: true
+
+jobs:
+  delete-branches:
+    name: Delete release branches (Dummy)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old release branches
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          BRANCH_LIMIT: ${{ inputs.BRANCH_LIMIT }}
+          REPO_NAME: ${{ inputs.REPO_NAME }}
+        run: |
+          branch_limit="$BRANCH_LIMIT"
+          echo "Keeping $branch_limit most recent release branches"
+
+          # Get release branches and their commit SHAs
+          branches_with_sha=$(gh api "/repos/$REPO_NAME/branches" --paginate --jq '.[] | select(.name | startswith("release/")) | {name: .name, sha: .commit.sha}')
+
+          if [ -z "$branches_with_sha" ]; then
+            echo "No release branches found"
+            exit 0
+          fi
+
+          # For each branch, get commit date and create sortable output
+          temp_file=$(mktemp)
+          echo "$branches_with_sha" | jq -r '.name + " " + .sha' | while read branch sha; do
+            if [ -n "$branch" ] && [ -n "$sha" ]; then
+              commit_date=$(gh api "/repos/$REPO_NAME/commits/$sha" --jq '.commit.committer.date' 2>/dev/null || echo "1970-01-01T00:00:00Z")
+              echo "$commit_date $branch" >> "$temp_file"
+            fi
+          done
+
+          # Sort the release branches from the newest
+          sorted_branches=$(sort -r "$temp_file" | cut -d' ' -f2-)
+          rm -f "$temp_file"
+
+          total=$(echo "$sorted_branches" | wc -l | tr -d ' ')
+          echo "Found $total release branches"
+
+          if [ "$total" -le "$branch_limit" ]; then
+            echo "No cleanup needed (total: $total, limit: $branch_limit)"
+          fi
+
+          echo "Keeping $branch_limit most recent branches, deleting $((total - branch_limit))"

@@ -89,7 +89,7 @@ jobs:
             }
   cleanup-release-branch:
     name: Cleanup Old Release Branches (Dummy)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cleanup Old Release Branches (Dummy)
-        run: echo "This is a dummy step for cleanup old release branches. Actual deletion is not implemented in this workflow."
+    uses: /.github/workflows/cleanup-release-branch.yaml@main
+    with:
+      BRANCH_LIMIT: ${{ inputs.retained_branch_count }}
+    secrets: inherit
