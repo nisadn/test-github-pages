@@ -156,4 +156,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo retained branch count
-        run: echo "Retained branch count: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}"
+        run: echo "Hello World"
