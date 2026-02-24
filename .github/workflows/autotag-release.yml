@@ -55,7 +55,7 @@ jobs:
             const releaseBranches = RELEASE_BRANCHES.split('   ');
             console.log('Release Branches:', releaseBranches);
 
-            for (let i = releaseBranches.length - 1; i >= releaseBranches.length - RETAINED_BRANCH_COUNT; i--) {
+            for (let i = releaseBranches.length - RETAINED_BRANCH_COUNT; i >= 0; i--) {
               const oldBranch = releaseBranches[i];
 
               // Create a tag for the old branch
