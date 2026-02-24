@@ -95,7 +95,7 @@ jobs:
 
   get-retained-branch-count:
     name: Get Retained Branch Count
-    needs: [get-release-branch, autotag-old-branch]
+    needs: get-release-branch
     runs-on: ubuntu-latest
     outputs:
       retained_branch_count: ${{ steps.get_count.outputs.retained_branch_count }}
@@ -140,7 +140,7 @@ jobs:
 
   cleanup-release-branch:
     name: Cleanup Old Release Branches
-    needs: get-retained-branch-count
+    needs: [get-retained-branch-count, autotag-old-branch]
     uses: ./.github/workflows/test-echo.yml
     with:
       BRANCH_LIMIT: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}
