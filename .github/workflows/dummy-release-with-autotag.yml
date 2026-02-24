@@ -2,6 +2,13 @@ name: Release with Autotag
 
 on:
   workflow_dispatch:
+    inputs:
+      release_version:
+        description: "Version for the release (e.g., 1.0.0)"
+        required: true
+        default: "1.0.0"
+  schedule:
+    - cron: "0 3 * * *" # Runs every day at 10 AM GMT+7
 
 jobs:
   need-approval:
@@ -10,6 +17,8 @@ jobs:
       name: "dummy-release"
     runs-on: ubuntu-latest
     steps:
+      - name: Echo input
+        run: echo "Release version: ${{ inputs.release_version }}"
       - name: Awaiting approval
         run: echo "This is a dummy release workflow that needs approval to run the autotag workflow. Please approve to proceed."
       - name: Trigger error
