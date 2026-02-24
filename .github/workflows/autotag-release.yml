@@ -143,4 +143,4 @@ jobs:
     needs: [get-retained-branch-count, autotag-old-branch]
     uses: ./.github/workflows/test-echo.yml
     with:
-      BRANCH_LIMIT: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}
+      BRANCH_LIMIT: ${{ fromJSON(needs.get-retained-branch-count.outputs.retained_branch_count) }}
