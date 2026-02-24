@@ -6,7 +6,7 @@ on:
       BRANCH_LIMIT:
         type: number
         description: 'The maximum number of release branches to keep'
-        default: '2'
+        default: 2
         required: true
 
 jobs:
