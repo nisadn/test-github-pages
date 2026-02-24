@@ -7,11 +7,8 @@ on:
         description: "Count of branches to retain"
         type: number
         default: 10
-  push:
-    branches:
-      - master
   schedule:
-    - cron: '*/5 * * * *' # Runs every 5 minutes
+    - cron: '*/5 * * * 2' # Runs every 5 minutes on Tuesday
   
 jobs:
   need-approval:
