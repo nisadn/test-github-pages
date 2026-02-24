@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       retain_limit:
-        description: 'Count of valid branches to retain'
+        description: "Count of valid branches to retain"
         type: number
         default: 4
 
@@ -35,10 +35,10 @@ jobs:
           git fetch --all
 
           # Get the latest release branch with pattern release/[number].[number].[number]
-          RELEASE_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
-          echo "Branches $RELEASE_BRANCHES"
-          RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
-          echo "valid_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
+          ALL_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
+          echo "Branches $ALL_BRANCHES"
+          VALID_BRANCHES=$(echo "$ALL_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          echo "valid_branches=$VALID_BRANCHES" >> $GITHUB_OUTPUT
 
   autotag-old-branch:
     name: Auto tag old release branch
@@ -47,12 +47,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: 'yarn'
-      - name: Create tag and delete branch
+      - name: Create tag
         uses: actions/github-script@v7
         env:
           RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.valid_branches }}
@@ -63,8 +58,6 @@ jobs:
             const releaseBranches = RELEASE_BRANCHES.split('   ');
             console.log('release Branch', releaseBranches);
 
-            // Delete all release branches except the last {{ RETAINED_BRANCH_COUNT }}
-            console.log(`Delete all release branches except the last ${RETAINED_BRANCH_COUNT} \n\n`);
             for (let i = 0; i < releaseBranches.length - RETAINED_BRANCH_COUNT; i++) {
               const oldBranch = releaseBranches[i];
 
