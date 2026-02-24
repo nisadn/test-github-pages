@@ -4,13 +4,7 @@ on:
   workflow_call:
     inputs:
       retained_branch_count:
-        description: "Count of branches to retain"
-        type: number
-        default: 5
-  workflow_dispatch:
-    inputs:
-      retained_branch_count:
-        description: "Count of branches to retain"
+        description: 'Count of branches to retain'
         type: number
         default: 5
 
@@ -28,18 +22,18 @@ jobs:
           # Fetch all branches
           git fetch --all
 
-          # Get all release branches
+          # Get all release branches, from oldest to latest
           RELEASE_BRANCHES=$(git branch -r --sort=committerdate | grep 'origin/release/' | sed 's|origin/||')
           echo "Branches $RELEASE_BRANCHES"
           RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "release_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
-  autotag-old-valid-branch:
+  autotag-old-branch:
     runs-on: ubuntu-latest
     needs: get-release-branch
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Create tag for old valid release branches
+      - name: Create tag for old release branches
         uses: actions/github-script@v7
         env:
           RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.release_branches }}
@@ -54,15 +48,15 @@ jobs:
             const oldBranches = allBranches.slice(0, allBranches.length - RETAINED_BRANCH_COUNT);
             console.log(`Old branches (excluding last ${RETAINED_BRANCH_COUNT})`, oldBranches);
 
-            // Then filter to only include those matching semantic version format (release/x.y.z)
+            // Filter branch with format (release/x.y.z)
             const pattern = /^release\/\d+\.\d+\.\d+$/;
-            const validBranches = oldBranches.filter(branch => pattern.test(branch.trim()));
-            console.log('Valid release branches', validBranches);
+            const filtered = oldBranches.filter(branch => pattern.test(branch.trim()));
+            console.log('Filtered old release branches', filtered);
 
-            // Create tag for filtered release branches
-            console.log(`Creating tags for ${validBranches.length} release branches \n\n`);
-            for (let i = 0; i < validBranches.length; i++) {
-              const oldBranch = validBranches[i];
+            // Create tag for valid old release branches
+            console.log(`Creating tags for ${filtered.length} release branches \n\n`);
+            for (let i = 0; i < filtered.length; i++) {
+              const oldBranch = filtered[i];
 
               // Create a tag for the old branch
               const oldTag = `v${oldBranch.replace('release/', '')}`;
@@ -99,9 +93,10 @@ jobs:
               }
             }
   cleanup-release-branch:
-    runs-on: ubuntu-latest
-    needs: autotag-old-valid-branch
-    name: Dummy cleanup job
-    steps:
-      - name: Dummy step
-        run: echo "This is a placeholder for the actual cleanup job that would delete old release"
+    name: Cleanup Old Release Branches
+    needs: autotag-old-branch
+    uses: traveloka/bei-comply/.github/workflows/cleanup_release_branches.yaml@v1
+    with:
+      BRANCH_LIMIT: ${{ inputs.retained_branch_count }}
+      REPO_NAME: ${{ github.repository }}
+    secrets: inherit
