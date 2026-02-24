@@ -1,13 +1,17 @@
 name: Test Echo Tuesday
 
-# https://superuser.com/questions/428807/run-a-cron-job-on-the-first-monday-of-every-month
+# https://superuser.com/questions/428807/run-a-cron-job-on-the-first-monday-of-every-month // old implementation
 on:
-  schedule:
-    - cron: '30 9 */32,15-21 * 2'
+  workflow_call:
+    inputs:
+      retained_branch_count:
+        description: "Count of branches to retain"
+        type: number
+        default: 7
 
 jobs:
   echo_everyday:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo Hello World
-        run: echo "Hello World Tuesday"
+      - name: Echo Input
+        run: echo "Retained Branch Count: ${{ inputs.retained_branch_count }}"

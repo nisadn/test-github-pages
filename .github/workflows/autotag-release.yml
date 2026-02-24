@@ -144,7 +144,6 @@ jobs:
   cleanup-release-branch:
     name: Cleanup Old Release Branches
     needs: get-retained-branch-count
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo retained branch count
-        run: echo "Hello World"
+    uses: ./.github/workflows/test-echo.yml
+    with:
+      retained_branch_count: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}
