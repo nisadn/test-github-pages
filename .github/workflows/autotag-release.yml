@@ -34,8 +34,8 @@ jobs:
           # Fetch all branches
           git fetch --all
 
-          # Get the latest release branch with pattern release/[number].[number].[number]
-          VALID_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||')
+          # Get the latest release branch with pattern release/[number].[number].[number], from oldest to latest
+          VALID_BRANCHES=$(git branch -r --sort=committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||')
           echo "Branches $VALID_BRANCHES"
           VALID_BRANCHES=$(echo "$VALID_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "valid_branches=$VALID_BRANCHES" >> $GITHUB_OUTPUT
@@ -98,7 +98,7 @@ jobs:
 
   get-retained-branch-count:
     name: Get Retained Branch Count
-    needs: autotag-old-branch
+    needs: [get-release-branch, autotag-old-branch]
     runs-on: ubuntu-latest
     outputs:
       retained_branch_count: ${{ steps.get_count.outputs.retained_branch_count }}
@@ -114,7 +114,7 @@ jobs:
           script: |
             const { ALL_BRANCHES } = process.env;
             const allBranches = ALL_BRANCHES.split('   ');
-            console.log('All branches:', ALL_BRANCHES, allBranches);
+            console.log('All branches:', allBranches);
 
             const validPattern = /^release\/\d+\.\d+\.\d+$/;
             const retainLimit = parseInt('${{ inputs.retain_limit }}');
