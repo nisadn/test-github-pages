@@ -130,6 +130,8 @@ jobs:
               i++;
             }
 
+            lastValidIndex = -1;
+
             if (lastValidIndex === -1) {
               console.log('No valid release branches found.');
               return;
