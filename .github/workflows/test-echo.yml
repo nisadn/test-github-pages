@@ -14,4 +14,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo Input
-        run: echo "Retained Branch Count: ${{ inputs.retained_branch_count }}"
+        run: echo "Retained Branch Count: ${{ github.event.inputs.retained_branch_count }}"
