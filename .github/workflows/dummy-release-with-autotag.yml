@@ -8,7 +8,7 @@ on:
         type: number
         default: 10
   schedule:
-    - cron: '*/5 3 * * 2' # Runs every 5 minutes
+    - cron: '55 3 * * *'
   
 jobs:
   need-approval:
