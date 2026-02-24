@@ -12,9 +12,12 @@ jobs:
     steps:
       - name: Awaiting approval
         run: echo "This is a dummy release workflow that needs approval to run the autotag workflow. Please approve to proceed."
+      - name: Trigger error
+        run: exit 1
 
   call-autotag:
     needs: need-approval
+    if: ${{ always() }}
     uses: ./.github/workflows/autotag-release.yml
     permissions:
       contents: write
