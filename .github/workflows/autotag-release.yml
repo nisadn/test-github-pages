@@ -35,7 +35,7 @@ jobs:
           git fetch --all
 
           # Get the latest release branch with pattern release/[number].[number].[number]
-          VALID_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
+          VALID_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||')
           echo "Branches $VALID_BRANCHES"
           VALID_BRANCHES=$(echo "$VALID_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "valid_branches=$VALID_BRANCHES" >> $GITHUB_OUTPUT
@@ -114,7 +114,7 @@ jobs:
           script: |
             const { ALL_BRANCHES } = process.env;
             const allBranches = ALL_BRANCHES.split('   ');
-            console.log('All branches:', allBranches);
+            console.log('All branches:', ALL_BRANCHES, allBranches);
 
             const validPattern = /^release\/\d+\.\d+\.\d+$/;
             const retainLimit = parseInt('${{ inputs.retain_limit }}');
