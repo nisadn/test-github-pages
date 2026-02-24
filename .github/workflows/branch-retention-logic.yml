@@ -1,0 +1,70 @@
+name: Branch Retention
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-release-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      release_branches: ${{ steps.get_all_release_branch.outputs.release_branches }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get All Release Version
+        id: get_all_release_branch
+        run: |
+          # Fetch all branches
+          git fetch --all
+
+          # Get the latest release branch with pattern release/[number].[number].[number]
+          RELEASE_BRANCHES=$(git branch -r | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
+          echo "Branches $RELEASE_BRANCHES"
+          RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          echo "release_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
+
+  get-first-retain-branch:
+    runs-on: ubuntu-latest
+    outputs:
+      first-retain-branch: ${{ steps.get_first_retain_branch.outputs.first_retain_branch }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get first retain branch
+        id: get_first_retain_branch
+        run: |
+          # Fetch all branches
+          git fetch --all
+
+          # Get the latest release branch with pattern release/[number].[number].[number]
+          RELEASE_BRANCHES=$(git branch -r | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -r | head -4 | tail -1)
+          echo "Branches $RELEASE_BRANCHES"
+          RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          echo "release_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
+
+  get-branches-to-retain-from-all-and-first-retain:
+    runs-on: ubuntu-latest
+    needs: get-first-retain-branch
+    outputs:
+      branches-to-retain: ${{ steps.get_branches_to_retain.outputs.branches_to_retain }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Get branches to retain
+        id: get_branches_to_retain
+        uses: actions/github-script@v7
+        env:
+          FIRST_RETAIN_BRANCH: ${{ needs.get-first-retain-branch.outputs.first-retain-branch }}
+        with:
+          script: |
+            const { FIRST_RETAIN_BRANCH } = process.env;
+            console.log('First retain branch', FIRST_RETAIN_BRANCH);
+            const cutoffDate = new Date(parseInt(FIRST_RETAIN_BRANCH.split('/').slice(-1)[0].split('.').map(num => num.padStart(2, '0')).join('')));
+            console.log('Cutoff date', cutoffDate);
+            const allBranches = await github.paginate(github.rest.repos.listBranches.endpoint.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 100,
+            }));
+            const branchesToRetain = allBranches.filter(branch => {
+              const match = branch.name.match(/^release\/(\d+)\.(\d+)\        
