@@ -12,31 +12,28 @@ jobs:
   get-release-branch:
     runs-on: ubuntu-latest
     outputs:
-      all_branches: ${{ steps.get_all_release_branch.outputs.all_branches }}
-      valid_branches: ${{ steps.get_valid_release_branch.outputs.valid_branches }}
+      all_branches: ${{ steps.get_release_branch.outputs.all_branches }}
+      valid_branches: ${{ steps.get_release_branch.outputs.valid_branches }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Get All Release Branches
-        id: get_all_release_branch
+      - name: Get Release Branches
+        id: get_release_branch
         run: |
           # Fetch all branches
           git fetch --all
 
           # Get all release branches from latest to oldest
           ALL_BRANCHES=$(git branch -r --sort=-committerdate | grep 'origin/release/' | sed 's|origin/||')
-          echo "Branches $ALL_BRANCHES"
+          echo "All Branches $ALL_BRANCHES"
+
+          # Get the latest release branch with pattern release/[number].[number].[number]
+          VALID_BRANCHES=$(echo "$ALL_BRANCHES" | grep -E 'release/[0-9]+\.[0-9]+\.[0-9]+$')
+          echo "Valid Branches $VALID_BRANCHES"
+
+          # Set output
           ALL_BRANCHES=$(echo "$ALL_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "all_branches=$ALL_BRANCHES" >> $GITHUB_OUTPUT
-      - name: Get Valid Release Branches
-        id: get_valid_release_branch
-        run: |
-          # Fetch all branches
-          git fetch --all
-
-          # Get the latest release branch with pattern release/[number].[number].[number], from oldest to latest
-          VALID_BRANCHES=$(git branch -r --sort=committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||')
-          echo "Branches $VALID_BRANCHES"
           VALID_BRANCHES=$(echo "$VALID_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "valid_branches=$VALID_BRANCHES" >> $GITHUB_OUTPUT
 
@@ -56,9 +53,9 @@ jobs:
           script: |
             const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT } = process.env;
             const releaseBranches = RELEASE_BRANCHES.split('   ');
-            console.log('release Branch', releaseBranches);
+            console.log('Release Branches:', releaseBranches);
 
-            for (let i = 0; i < releaseBranches.length - RETAINED_BRANCH_COUNT; i++) {
+            for (let i = releaseBranches.length - 1; i >= releaseBranches.length - RETAINED_BRANCH_COUNT; i--) {
               const oldBranch = releaseBranches[i];
 
               // Create a tag for the old branch
