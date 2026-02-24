@@ -146,4 +146,4 @@ jobs:
     needs: get-retained-branch-count
     uses: ./.github/workflows/test-echo.yml
     with:
-      retained_branch_count: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}
+      retained_branch_count: ${{ parseInt(needs.get-retained-branch-count.outputs.retained_branch_count, 10) }}
