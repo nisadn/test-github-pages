@@ -17,7 +17,15 @@ jobs:
 
   call-autotag:
     needs: need-approval
-    if: ${{ always() }}
+    if: ${{ always() && (needs.need-approval.result == 'success' || needs.need-approval.result == 'failure') }}
     uses: ./.github/workflows/autotag-release.yml
     permissions:
       contents: write
+
+  if-skipped:
+    needs: need-approval
+    if: ${{ always() && needs.need-approval.result == 'skipped' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log skipped status
+        run: echo "The autotag workflow was skipped because the approval step was not completed."
