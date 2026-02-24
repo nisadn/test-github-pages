@@ -1,12 +1,6 @@
 name: Release with Autotag
 
 on:
-  workflow_dispatch:
-    inputs:
-      count:
-        description: "Count of branches to retain"
-        type: number
-        default: 10
   schedule:
     - cron: '*/5 * * * *' # Runs every 5 minutes
   
