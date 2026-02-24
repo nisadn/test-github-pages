@@ -8,7 +8,7 @@ on:
         type: number
         default: 10
   schedule:
-    - cron: '55 3 * * *'
+    - cron: '15 4 * * *'
   
 jobs:
   need-approval:
