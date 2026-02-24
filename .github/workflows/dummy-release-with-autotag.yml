@@ -3,12 +3,12 @@ name: Release with Autotag
 on:
   workflow_dispatch:
     inputs:
-      release_version:
-        description: "Version for the release (e.g., 1.0.0)"
-        required: true
-        default: "1.0.0"
+      count:
+        description: "Count of branches to retain"
+        type: number
+        default: 10
   schedule:
-    - cron: '0 3 * * *' # Runs daily at 10 AM GMT+7
+    - cron: '*/5 * * * *' # Runs every 5 minutes
   
 jobs:
   need-approval:
@@ -30,6 +30,8 @@ jobs:
     uses: ./.github/workflows/autotag-release.yml
     permissions:
       contents: write
+    with:
+      retained_branch_count: ${{ inputs.count || 7 }}
 
   if-skipped:
     needs: need-approval
