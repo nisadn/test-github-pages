@@ -1,6 +1,15 @@
 name: Release with Autotag
 
 on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "Count of branches to retain"
+        type: number
+        default: 10
+  push:
+    branches:
+      - master
   schedule:
     - cron: '*/5 * * * *' # Runs every 5 minutes
   
@@ -12,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo input
-        run: echo "Release version ${{ inputs.release_version || 'This is from schedule' }}"
+        run: echo "Release version ${{ inputs.release_version || 'This is from push or schedule' }}"
       - name: Awaiting approval
         run: echo "This is a dummy release workflow that needs approval to run the autotag workflow. Please approve to proceed."
       - name: Trigger error
