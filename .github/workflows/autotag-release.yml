@@ -9,7 +9,7 @@ on:
         default: 4
 
 jobs:
-  get_release_branch:
+  get-release-branch:
     runs-on: ubuntu-latest
     outputs:
       all_branches: ${{ steps.get_all_release_branch.outputs.release_branches }}
@@ -40,10 +40,10 @@ jobs:
           RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "valid_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
 
-  autotag_old_branch:
+  autotag-old-branch:
     name: Auto tag old release branch
     runs-on: ubuntu-latest
-    needs: get_release_branch
+    needs: get-release-branch
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
       - name: Create tag and delete branch
         uses: actions/github-script@v7
         env:
-          RELEASE_BRANCHES: ${{ needs.get_release_branch.outputs.valid_branches }}
+          RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.valid_branches }}
           RETAINED_BRANCH_COUNT: ${{ inputs.retain_limit }}
         with:
           script: |
@@ -103,9 +103,9 @@ jobs:
               }
             }
 
-  get_retained_branch_count:
+  get-retained-branch-count:
     name: Get Retained Branch Count
-    needs: autotag_old_branch
+    needs: autotag-old-branch
     runs-on: ubuntu-latest
     outputs:
       retained_branch_count: ${{ steps.get_count.outputs.retained_branch_count }}
@@ -116,7 +116,7 @@ jobs:
         id: get_count
         uses: actions/github-script@v7
         env:
-          ALL_BRANCHES: ${{ needs.get_release_branch.outputs.all_branches }}
+          ALL_BRANCHES: ${{ needs.get-release-branch.outputs.all_branches }}
         with:
           script: |
             const { ALL_BRANCHES } = process.env;
@@ -150,10 +150,10 @@ jobs:
             console.log(`Total branches to retain: ${lastValidIndex + 1}`);
             core.setOutput('retained_branch_count', lastValidIndex + 1);
 
-  cleanup_release_branch:
+  cleanup-release-branch:
     name: Cleanup Old Release Branches
-    needs: get_retained_branch_count
+    needs: get-retained-branch-count
     runs-on: ubuntu-latest
     steps:
       - name: Echo retained branch count
-        run: echo "Retained branch count: ${{ needs.get_retained_branch_count.outputs.retained_branch_count }}"
+        run: echo "Retained branch count: ${{ needs.get-retained-branch-count.outputs.retained_branch_count }}"
