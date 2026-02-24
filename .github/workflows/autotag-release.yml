@@ -12,8 +12,8 @@ jobs:
   get-release-branch:
     runs-on: ubuntu-latest
     outputs:
-      all_branches: ${{ steps.get_all_release_branch.outputs.release_branches }}
-      valid_branches: ${{ steps.get_valid_release_branch.outputs.release_branches }}
+      all_branches: ${{ steps.get_all_release_branch.outputs.all_branches }}
+      valid_branches: ${{ steps.get_valid_release_branch.outputs.valid_branches }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,10 +24,10 @@ jobs:
           git fetch --all
 
           # Get all release branches from latest to oldest
-          RELEASE_BRANCHES=$(git branch -r --sort=-committerdate | grep 'origin/release/' | sed 's|origin/||')
-          echo "Branches $RELEASE_BRANCHES"
-          RELEASE_BRANCHES=$(echo "$RELEASE_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
-          echo "all_branches=$RELEASE_BRANCHES" >> $GITHUB_OUTPUT
+          ALL_BRANCHES=$(git branch -r --sort=-committerdate | grep 'origin/release/' | sed 's|origin/||')
+          echo "Branches $ALL_BRANCHES"
+          ALL_BRANCHES=$(echo "$ALL_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          echo "all_branches=$ALL_BRANCHES" >> $GITHUB_OUTPUT
       - name: Get Valid Release Branches
         id: get_valid_release_branch
         run: |
@@ -35,9 +35,9 @@ jobs:
           git fetch --all
 
           # Get the latest release branch with pattern release/[number].[number].[number]
-          ALL_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
-          echo "Branches $ALL_BRANCHES"
-          VALID_BRANCHES=$(echo "$ALL_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
+          VALID_BRANCHES=$(git branch -r --sort=-committerdate | grep -E 'origin/release/[0-9]+\.[0-9]+\.[0-9]+$' | sed 's|origin/||' | sort -V)
+          echo "Branches $VALID_BRANCHES"
+          VALID_BRANCHES=$(echo "$VALID_BRANCHES" | tr '\n' ' ' | sed 's/^ *//;s/ *$//')
           echo "valid_branches=$VALID_BRANCHES" >> $GITHUB_OUTPUT
 
   autotag-old-branch:
