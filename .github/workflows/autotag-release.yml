@@ -123,18 +123,15 @@ jobs:
             const validBranches = [];
             let lastValidIndex = -1;
 
-            allBranches.forEach((branch, index) => {
-              const branchName = branch.trim();
-              if (validPattern.test(branchName)) {
-                validBranches.push(branchName);
-                lastValidIndex = index;
+            let i = 0;
+            while (validBranches.length < retainLimit && i < allBranches.length) {
+              const branch = allBranches[i].trim();
+              if (validPattern.test(branch)) {
+                validBranches.push(branch);
+                lastValidIndex = i;
               }
-
-              console.log('Checking branch:', branch, validBranches.length, retainLimit);
-              if (validBranches.length === retainLimit) {
-                break;
-              }
-            });
+              i++;
+            }
 
             if (lastValidIndex === -1) {
               console.log('No valid release branches found.');
