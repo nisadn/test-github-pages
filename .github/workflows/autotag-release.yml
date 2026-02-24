@@ -47,7 +47,7 @@ jobs:
         with:
           script: |
             const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT } = process.env;
-            const allBranches = RELEASE_BRANCHES.split('   ');
+            const allBranches = [];
             console.log('All Release Branches', allBranches);
 
             // Exclude the last RETAINED_BRANCH_COUNT branches
