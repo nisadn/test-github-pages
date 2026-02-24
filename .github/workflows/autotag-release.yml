@@ -130,6 +130,7 @@ jobs:
                 lastValidIndex = index;
               }
 
+              console.log('Checking branch:', branch, validBranches.length, retainLimit);
               if (validBranches.length === retainLimit) {
                 return;
               }
