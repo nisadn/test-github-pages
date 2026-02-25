@@ -1,0 +1,16 @@
+name: 🏷️ Trigger - Auto tag and cleanup release branch
+
+on:
+  workflow_dispatch:
+    inputs:
+      retain_limit:
+        description: "Count of valid branches to retain"
+        type: number
+        default: 4
+
+jobs:
+  trigger_cleanup_release:
+    name: Trigger Auto tag and cleanup release branch workflow
+    uses: ./.github/workflows/autotag-release.yml
+    with:
+      retain_limit: ${{ inputs.retain_limit }}
