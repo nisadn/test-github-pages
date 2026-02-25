@@ -1,22 +1,11 @@
 name: Test Echo Tuesday
 
 on:
-  workflow_call:
-    inputs:
-      BRANCH_LIMIT:
-        type: number
-        description: 'The maximum number of release branches to keep'
-        default: 2
-        required: true
-
+  push:
+  
 jobs:
   echo_input:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v7
-        env:
-          RETAINED_BRANCH_COUNT: ${{ inputs.BRANCH_LIMIT }}
-        with:
-          script: |
-            const { RETAINED_BRANCH_COUNT } = process.env;
-            console.log(`Retained branch count: ${RETAINED_BRANCH_COUNT}`);
+      - name: Echo Hello World
+        run: echo "Hello World this is Tuesday"
