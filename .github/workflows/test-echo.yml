@@ -1,4 +1,4 @@
-name: Test Echo Tuesday
+name: Test Echo Updated
 
 on:
   workflow_call:
