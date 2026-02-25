@@ -55,6 +55,11 @@ jobs:
             const releaseBranches = RELEASE_BRANCHES.split('   ');
             console.log('Release Branches:', releaseBranches);
 
+            if (releaseBranches.length <= RETAINED_VERSION_COUNT) {
+              console.log('No old branches to tag.');
+              return;
+            }
+
             for (let i = RETAINED_BRANCH_COUNT; i < releaseBranches.length; i++) {
               const oldBranch = releaseBranches[i];
 
