@@ -134,7 +134,7 @@ jobs:
 
             if (lastValidIndex === -1) {
               console.log('No valid release branches found.');
-              throw error;
+              throw new Error('No valid release branches found.');
             }
 
             console.log(`Total branches to retain: ${lastValidIndex + 1}`);
