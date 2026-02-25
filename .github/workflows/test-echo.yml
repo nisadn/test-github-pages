@@ -1,7 +1,7 @@
 name: Test Echo Tuesday
 
 on:
-  push:
+  create:
   
 jobs:
   echo_input:
