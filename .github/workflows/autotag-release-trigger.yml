@@ -13,4 +13,4 @@ jobs:
     name: Trigger Auto tag and cleanup release branch workflow
     uses: ./.github/workflows/autotag-release.yml
     with:
-      retain_limit: ${{ inputs.retain_limit }}
+      retain_limit: ${{ fromJSON(inputs.retain_limit) }}
