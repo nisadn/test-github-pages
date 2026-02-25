@@ -1,4 +1,4 @@
-name: Test Echo Updated
+name: Test Echo V2
 
 on:
   workflow_call:

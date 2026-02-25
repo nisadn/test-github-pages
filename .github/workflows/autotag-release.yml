@@ -143,6 +143,6 @@ jobs:
   cleanup-release-branch:
     name: Cleanup Old Release Branches
     needs: [get-retained-branch-count, autotag-old-branch]
-    uses: ./.github/workflows/test-echo.yml
+    uses: ./.github/workflows/test-echo-updated.yml
     with:
       BRANCH_LIMIT: ${{ fromJSON(needs.get-retained-branch-count.outputs.retained_branch_count) }}
