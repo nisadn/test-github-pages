@@ -18,8 +18,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Request to publish the latest release"
-          title: "Request to publish the latest release"
-          body: "This pull request is created to request publishing the latest release. Please review and merge it to trigger the publishing process."
-          base: master
-          branch: publish-request
+          title: "Automated PR"
+          commit-message: "Update"
+          sign-commits: true
+          branch: 'publish-rc'
