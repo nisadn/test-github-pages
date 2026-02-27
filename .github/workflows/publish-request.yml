@@ -20,5 +20,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "Automated PR"
           commit-message: "Update"
-          sign-commits: true
           branch: 'publish-rc'
