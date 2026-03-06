@@ -11,6 +11,7 @@ const path = require('path');
 const semver = require('semver');
 let updatedVersion;
 
+const args = process.argv.slice(2);
 const [version] = args;
 
 function getPackageJson() {
