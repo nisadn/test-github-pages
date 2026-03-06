@@ -1,0 +1,17 @@
+name: After Pull Request Merged
+
+on:
+  pull_request:
+    types:
+      - closed
+    brances:
+      - action-pull-request
+
+jobs:
+  after-merged:
+    name: After Pull Request Merged
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Echo merged pull request
+        run: echo "Pull request merged"
