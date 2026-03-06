@@ -8,6 +8,8 @@ on:
 jobs:
   push-commit:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.publish.outputs.version }}
     permissions:
       contents: write
     steps:
@@ -31,17 +33,21 @@ jobs:
         with:
           cmd: install --frozen-lockfile # will run `yarn install` command
       - name: Update version & changelog
-        run: yarn run:publish patch
+        id: publish
+        run: |
+          OUTPUT=$(yarn run:publish patch)
+          echo "$OUTPUT"
+          VERSION=$(echo "$OUTPUT" | grep "version=" | cut -d'=' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       # - name: Update readme
       #   run: |
       #     # Or replace specific content
       #     sed -i 's/🚀 This is an awesome \[Next.js\]/🚀 This is a super awesome [Next.js]/' README.md
-      - run: throw new Error('Trigger error')
 
       - name: Create and push new branch with commit
         run: |
-          git add README.md
-          git commit -m "Trigger pull request process - Update README"
+          git add .
+          git commit -m "chore: bump version to ${{ steps.publish.outputs.version }}"
           git push origin action-pull-request
   create-pull-request:
     name: Create Pull Request
@@ -64,7 +70,8 @@ jobs:
                 repo: context.repo.repo,
                 head: 'action-pull-request',
                 base: 'master',
-                title: 'Automated Pull Request',
+                title: 'chore: bump version to ${{ needs.push-commit.outputs.version }}',
+                body: 'Automated version bump and changelog update',
                 draft: true,
               });
             } catch (error) {

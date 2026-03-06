@@ -58,7 +58,13 @@ try {
   // Bump version in package.json
   updatedVersion = updateVersion();
   
-  return updatedVersion;
+  // Output for GitHub Actions
+  console.log(`version=${updatedVersion}`);
+  
+  // Also set as GitHub Actions output
+  if (process.env.GITHUB_OUTPUT) {
+    require('fs').appendFileSync(process.env.GITHUB_OUTPUT, `version=${updatedVersion}\n`);
+  }
 
   // publish();
 } catch (e) {
