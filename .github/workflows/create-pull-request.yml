@@ -13,22 +13,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Create and push new branch with commit
+        with:
+          ref: action-pull-request
+      - name: Override git config
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Update readme
+        run: |
+          # Or replace specific content
+          sed -i 's/This is a \[Next.js\]/🚀 This is an awesome [Next.js]/' README.md
 
-          # Create a new branch
-          git fetch origin action-pull-request
-          git checkout action-pull-request
-
-          # make changes to trigger the pull request process
-          # echo "Triggering pull request process by making a dummy change." > dummy.txt
-
-          # Stage, commit, and push the changes
-          # git add dummy.txt
-          # git commit -m "Trigger pull request process"
-          git commit -m "Trigger pull request process" --allow-empty
+      - name: Create and push new branch with commit
+        run: |
+          git add README.md
+          git commit -m "Trigger pull request process - Update README"
           git push origin action-pull-request
   create-pull-request:
     name: Create Pull Request
