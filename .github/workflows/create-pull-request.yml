@@ -22,7 +22,7 @@ jobs:
       - name: Update readme
         run: |
           # Or replace specific content
-          sed -i 's/🚀 This is an awesome [Next.js] /🚀 This is a very awesome [Next.js] /' README.md
+          sed -i 's/🚀 This is an awesome \[Next.js\]/🚀 This is a super awesome [Next.js]/' README.md
 
       - name: Create and push new branch with commit
         run: |
