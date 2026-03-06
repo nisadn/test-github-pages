@@ -6,28 +6,31 @@ on:
       - action-pull-request
 
 jobs:
-  make-changes:
-    name: Make Changes
+  push-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Make changes
-        run: |
-          # Make any necessary changes to trigger the pull request process
-          echo "Triggering pull request process by making a dummy change." > dummy.txt
-      - name: Push changes
-        shell: bash
+      - name: Create and push new branch with commit
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add dummy.txt
+          # Create a new branch
+          git fetch origin action-pull-request
+          git checkout action-pull-request
+
+          # make changes to trigger the pull request process
+          echo "Triggering pull request process by making a dummy change." > dummy.txt
+
+          # Stage, commit, and push the changes
           git commit -m "Trigger pull request process"
           git push origin action-pull-request
   create-pull-request:
     name: Create Pull Request
-    needs: make-changes
+    needs: push-commit
     runs-on: ubuntu-latest
     permissions:
       contents: write
