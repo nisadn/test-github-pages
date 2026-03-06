@@ -26,6 +26,7 @@ jobs:
           echo "Triggering pull request process by making a dummy change." > dummy.txt
 
           # Stage, commit, and push the changes
+          git add dummy.txt
           git commit -m "Trigger pull request process"
           git push origin action-pull-request
   create-pull-request:
