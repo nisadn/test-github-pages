@@ -1,0 +1,54 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches:
+      - action-pull-request
+
+jobs:
+  make-changes:
+    name: Make Changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Make changes
+        run: |
+          # Make any necessary changes to trigger the pull request process
+          echo "Triggering pull request process by making a dummy change." > dummy.txt
+      - name: Override git config
+        shell: bash
+        run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
+      - name: Push changes
+        shell: bash
+        run: |
+          git add dummy.txt
+          git commit -m "Trigger pull request process"
+          git push origin action-pull-request
+  create-pull-request:
+    name: Create Pull Request
+    needs: make-changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log('Creating pull request...');
+            try {
+              await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                head: 'action-pull-request',
+                base: 'master',
+                title: 'Automated Pull Request',
+              });
+            } catch (error) {
+              console.error(`Error creating pull request: ${error.message}`);
+              process.exit(1);
+            }
