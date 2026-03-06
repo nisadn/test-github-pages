@@ -21,7 +21,7 @@ jobs:
       #     git config --global user.name "github-actions[bot]"
       #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Update version & changelog
-        run: pnpm run:publish patch
+        run: yarn run:publish patch
       # - name: Update readme
       #   run: |
       #     # Or replace specific content
