@@ -53,7 +53,7 @@ function log(message, type = 'log') {
 
 try {
   // Publishing starts
-  log(`PUBLISHING ${folder.toUpperCase()}`);
+  log(`PUBLISHING starts`);
 
   // Bump version in package.json
   updatedVersion = updateVersion();
