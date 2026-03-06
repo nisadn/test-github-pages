@@ -52,6 +52,7 @@ jobs:
                 head: 'action-pull-request',
                 base: 'master',
                 title: 'Automated Pull Request',
+                draft: true,
               });
             } catch (error) {
               console.error(`Error creating pull request: ${error.message}`);
