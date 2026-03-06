@@ -22,7 +22,7 @@ jobs:
       - name: Update readme
         run: |
           # Or replace specific content
-          sed -i 's/This is a \[Next.js\]/🚀 This is an awesome [Next.js]/' README.md
+          sed -i 's/This is a \[Next.js\]/🚀 This is an awesome [Next.js] v2 /' README.md
 
       - name: Create and push new branch with commit
         run: |
@@ -39,9 +39,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Override git config
-        shell: bash
-        run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Create Pull Request
         uses: actions/github-script@v7
         with:
