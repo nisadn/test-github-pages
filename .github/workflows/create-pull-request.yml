@@ -20,6 +20,16 @@ jobs:
       #   run: |
       #     git config --global user.name "github-actions[bot]"
       #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+          node-version-file: .nvmrc
+          cache: "yarn"
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install --frozen-lockfile # will run `yarn install` command
       - name: Update version & changelog
         run: yarn run:publish patch
       # - name: Update readme
