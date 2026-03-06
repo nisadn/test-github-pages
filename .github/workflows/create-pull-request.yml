@@ -1,22 +1,27 @@
 name: Create Pull Request
 
 on:
-  push:
-    branches:
-      - action-pull-request
+  workflow_dispatch:
 
 jobs:
   push-commit:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.publish.outputs.version }}
+      branch: ${{ steps.create-branch.outputs.branch }}
     permissions:
       contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: action-pull-request
+          ref: master
+      - name: Create new branch
+        id: create-branch
+        run: |
+          BRANCH_NAME="version-bump-$(date +%Y%m%d-%H%M%S)"
+          git checkout -b $BRANCH_NAME
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
       - uses: fregante/setup-git-user@v2
       # - name: Override git config
       #   run: |
@@ -48,7 +53,7 @@ jobs:
         run: |
           git add .
           git commit -m "chore: bump version to ${{ steps.publish.outputs.version }}"
-          git push origin action-pull-request
+          git push origin ${{ steps.create-branch.outputs.branch }}
   create-pull-request:
     name: Create Pull Request
     needs: push-commit
@@ -68,7 +73,7 @@ jobs:
               await github.rest.pulls.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                head: 'action-pull-request',
+                head: '${{ needs.push-commit.outputs.branch }}',
                 base: 'master',
                 title: 'chore: bump version to ${{ needs.push-commit.outputs.version }}',
                 body: 'Automated version bump and changelog update',
