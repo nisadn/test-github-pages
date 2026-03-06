@@ -16,12 +16,12 @@ jobs:
         run: |
           # Make any necessary changes to trigger the pull request process
           echo "Triggering pull request process by making a dummy change." > dummy.txt
-      - name: Override git config
-        shell: bash
-        run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Push changes
         shell: bash
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
           git add dummy.txt
           git commit -m "Trigger pull request process"
           git push origin action-pull-request
