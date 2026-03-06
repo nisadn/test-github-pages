@@ -23,11 +23,12 @@ jobs:
           git checkout action-pull-request
 
           # make changes to trigger the pull request process
-          echo "Triggering pull request process by making a dummy change." > dummy.txt
+          # echo "Triggering pull request process by making a dummy change." > dummy.txt
 
           # Stage, commit, and push the changes
-          git add dummy.txt
-          git commit -m "Trigger pull request process"
+          # git add dummy.txt
+          # git commit -m "Trigger pull request process"
+          git commit -m "Trigger pull request process" --allow-empty
           git push origin action-pull-request
   create-pull-request:
     name: Create Pull Request
