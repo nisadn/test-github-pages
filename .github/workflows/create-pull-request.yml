@@ -26,6 +26,7 @@ jobs:
           echo "Triggering pull request process by making a dummy change." > dummy.txt
 
           # Stage, commit, and push the changes
+          git add dummy.txt
           git commit -m "Trigger pull request process"
           git push origin action-pull-request
   create-pull-request:
@@ -38,6 +39,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Override git config
+        shell: bash
+        run: git config --global url."https://${{ inputs.GITHUB_TOKEN }}@github.com/".insteadOf ssh://git@github.com/
       - name: Create Pull Request
         uses: actions/github-script@v7
         with:
