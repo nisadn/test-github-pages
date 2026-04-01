@@ -20,7 +20,7 @@ jobs:
         id: create-branch
         run: |
           BRANCH_NAME="version-bump-$(date +%Y%m%d-%H%M%S)"
-          git checkout -b $BRANCH_NAME
+          git checkout -b $BRANCH_NAME master
           echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
       - uses: fregante/setup-git-user@v2
       # - name: Override git config
