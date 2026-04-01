@@ -1,7 +1,9 @@
 name: Auto Commit and PR
-on: push
-branches:
-  - master
+on: 
+  push:
+    branches:
+      - master
+
 jobs:
   create-pr:
     runs-on: ubuntu-latest
