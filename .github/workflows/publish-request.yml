@@ -24,4 +24,4 @@ jobs:
           title: "Automated PR"
           commit-message: "Update"
           branch: 'publish-rc'
-          base: ${{ github.ref }}
+          base: 'master'
