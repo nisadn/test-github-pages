@@ -1,0 +1,9 @@
+name: 'Update Version'
+description: 'Update version numbers in Android and iOS project files based on branch name'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create dummy file
+      run: echo "dummy content" > dummy.txt
+      shell: bash

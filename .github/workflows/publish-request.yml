@@ -6,9 +6,6 @@ on:
       - testing/push
 
 jobs:
-  make-changes:
-    name: Make changes to trigger publish
-    uses: ./.github/workflows/changes-another-workflow.yml
   create-pull-request:
     name: Create Pull Request to publish
     needs: make-changes
@@ -17,8 +14,8 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Changes
+        uses: ./.github/actions/update-version
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
