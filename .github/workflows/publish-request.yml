@@ -1,4 +1,4 @@
-name: Request to Publish
+name: '[Testing] Request to Publish'
 
 on:
   push:
