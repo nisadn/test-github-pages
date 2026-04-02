@@ -7,6 +7,10 @@ on:
         description: "Count of valid branches to retain"
         type: number
         default: 4
+      prefix:
+        description: "Prefix for the tag to be created"
+        type: string
+        default: "v"
 
 jobs:
   get-release-branch:
@@ -49,6 +53,7 @@ jobs:
         env:
           RELEASE_BRANCHES: ${{ needs.get-release-branch.outputs.valid_branches }}
           RETAINED_BRANCH_COUNT: ${{ inputs.retain_limit }}
+          TAG_PREFIX: ${{ inputs.prefix }}
         with:
           script: |
             const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT } = process.env;
@@ -64,7 +69,7 @@ jobs:
               const oldBranch = releaseBranches[i];
 
               // Create a tag for the old branch
-              const oldTag = `v${oldBranch.replace('release/', '')}`;
+              const oldTag = `${TAG_PREFIX}${oldBranch.replace('release/', '')}`;
               try {
                 // Try to get the tag
                 await github.rest.git.getRef({
