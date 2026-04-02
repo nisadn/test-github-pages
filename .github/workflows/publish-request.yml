@@ -1,7 +1,9 @@
 name: Request to Publish
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - testing/push
 
 jobs:
   create-pull-request:
@@ -24,4 +26,4 @@ jobs:
           title: "Automated PR"
           commit-message: "Update"
           branch: 'publish-rc'
-          base: 'master'
+          base: ${{ github.ref_name }} 
