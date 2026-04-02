@@ -1,0 +1,17 @@
+name: "[Testing] Changes from another workflow"
+
+on:
+  workflow_call:
+
+jobs:
+  changes:
+    name: Changes from another workflow
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Make changes
+        run: |
+          # Make any necessary changes to trigger the publish process
+          echo "Triggering publish process by making a dummy change." > dummy.txt
