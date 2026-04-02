@@ -17,6 +17,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Changes
         uses: ./.github/actions/update-version
+      - name: Another Changes
+        if: github.event.created == true
+        uses: ./.github/actions/update-version-dummy
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
