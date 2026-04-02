@@ -56,7 +56,7 @@ jobs:
           TAG_PREFIX: ${{ inputs.prefix }}
         with:
           script: |
-            const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT } = process.env;
+            const { RELEASE_BRANCHES, RETAINED_BRANCH_COUNT, TAG_PREFIX } = process.env;
             const releaseBranches = RELEASE_BRANCHES.split('   ');
             console.log('Release Branches:', releaseBranches);
 
