@@ -20,10 +20,16 @@ jobs:
       - name: Another Changes
         if: github.event.created == true
         uses: ./.github/actions/update-version-dummy
+      - uses: actions/create-github-app-token@v2
+        id: generate-token
+        with:
+          app-id: '3250249'
+          private-key: ${{ secrets.MOCCHI_BOT_PRIVATE_KEY }}
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.generate-token.outputs.token }}
+          sign-commits: true
           title: "Automated PR"
           commit-message: "Update"
           branch: "publish-rc"
