@@ -11,6 +11,7 @@ jobs:
     uses: ./.github/workflows/changes-another-workflow.yml
   create-pull-request:
     name: Create Pull Request to publish
+    needs: make-changes
     runs-on: ubuntu-latest
     permissions:
       contents: write
