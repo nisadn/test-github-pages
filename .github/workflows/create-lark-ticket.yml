@@ -1,0 +1,17 @@
+name: Create Lark Ticket
+
+on:
+  push:
+    branches:
+      - feat/webhook
+
+jobs:
+  create-lark-ticket:
+    name: Create Lark Ticket
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send POST request with JSON
+        run: |
+          curl -X POST "https://traveloka.sg.larksuite.com/base/automation/webhook/event/Akgma6ZQDwhakQh5sG9lCqQbgNg" \
+          -H "Content-Type: application/json" \
+          -d '{"prTitle": "chore: this is testing only"}'
