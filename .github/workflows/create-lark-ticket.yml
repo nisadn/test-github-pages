@@ -6,12 +6,25 @@ on:
       - feat/webhook
 
 jobs:
-  create-lark-ticket:
-    name: Create Lark Ticket
+  # create-lark-ticket:
+  #   name: Create Lark Ticket
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Send POST request with JSON
+  #       run: |
+  #         curl -X POST "https://traveloka.sg.larksuite.com/base/automation/webhook/event/Akgma6ZQDwhakQh5sG9lCqQbgNg" \
+  #         -H "Content-Type: application/json" \
+  #         -d '{"prTitle": "chore: this is testing only"}'
+
+  get-workflow-history:
+    name: Get Workflow History
     runs-on: ubuntu-latest
     steps:
-      - name: Send POST request with JSON
+      - name: Fetch
         run: |
-          curl -X POST "https://traveloka.sg.larksuite.com/base/automation/webhook/event/Akgma6ZQDwhakQh5sG9lCqQbgNg" \
-          -H "Content-Type: application/json" \
-          -d '{"prTitle": "chore: this is testing only"}'
+          curl -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2026-03-10" \
+          -d "event=push" \
+          https://api.github.com/repos/nisadn/test-github-pages/actions/runs
