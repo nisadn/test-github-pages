@@ -35,5 +35,5 @@ jobs:
       - name: Send POST request with JSON to Jira
         run: |
           curl -X POST -H 'Content-type: application/json' -H 'X-Automation-Webhook-Token: 25a2e953f06ff1204f6f88955d52153938ab8e90' \
-          --data '{"issues":["TEST-1"]}' \
+          --data '{"token": "${{secrets.GITHUB_TOKEN}}"}' \
           https://api-private.atlassian.com/automation/webhooks/jira/a/7a5602d2-a791-4344-9822-807037202b17/019d951d-beae-7c83-9f24-4530d5d44a7d
