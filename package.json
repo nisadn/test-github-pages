@@ -15,7 +15,6 @@
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "redux-thunk": "^3.1.0",
     "semver": "^7.7.4"
   },
   "devDependencies": {
