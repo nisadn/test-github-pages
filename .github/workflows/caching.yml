@@ -2,7 +2,7 @@ name: Caching
 on:
   push:
     branches:
-      - feat/cache
+      - feat/cache-2
 
 jobs:
   caching:
