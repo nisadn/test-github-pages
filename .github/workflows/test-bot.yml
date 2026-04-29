@@ -1,0 +1,97 @@
+name: Test GitHub Actions Bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      jira_key:
+        description: 'Jira ticket ID (e.g., TEST-123)'
+        required: true
+        type: string
+      pr_number:
+        description: 'PR number to comment on (optional - will search if empty)'
+        required: false
+        type: string
+      test_message:
+        description: 'Custom test message'
+        required: false
+        default: 'Testing GitHub Actions bot integration'
+        type: string
+
+jobs:
+  test-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test GitHub Actions Bot Comment
+        run: |
+          JIRA_KEY="${{ github.event.inputs.jira_key }}"
+          PR_NUMBER="${{ github.event.inputs.pr_number }}"
+          TEST_MESSAGE="${{ github.event.inputs.test_message }}"
+          
+          echo "🤖 Testing GitHub Actions bot with:"
+          echo "  Jira Key: $JIRA_KEY"
+          echo "  PR Number: ${PR_NUMBER:-'auto-detect'}"
+          echo "  Message: $TEST_MESSAGE"
+          
+          # If no PR specified, find one with the Jira key
+          if [ -z "$PR_NUMBER" ]; then
+            echo "🔍 Searching for PRs containing '$JIRA_KEY'..."
+            PR_NUMBER=$(curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | \
+              jq -r ".[] | select(.title | test(\"$JIRA_KEY\"; \"i\") or .body | test(\"$JIRA_KEY\"; \"i\") or .head.ref | test(\"$JIRA_KEY\"; \"i\")) | .number" | head -1)
+          fi
+          
+          # If still no PR, get the first open PR for testing
+          if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+            echo "🔍 No PRs found with Jira key, using first open PR..."
+            PR_NUMBER=$(curl -L \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | \
+              jq -r '.[0].number // empty')
+          fi
+          
+          if [ -z "$PR_NUMBER" ]; then
+            echo "❌ No open PRs found to test on"
+            exit 1
+          fi
+          
+          echo "📝 Adding test comment to PR #$PR_NUMBER..."
+          
+          # Create test comment using GitHub Actions bot
+          COMMENT="🤖 **GitHub Actions Bot Test**
+
+**Jira Ticket**: $JIRA_KEY  
+**Test Message**: $TEST_MESSAGE  
+**Triggered by**: @${{ github.actor }}  
+**Workflow**: \`${{ github.workflow }}\`  
+**Run ID**: ${{ github.run_id }}
+
+This comment was posted by the GitHub Actions bot using \`GITHUB_TOKEN\` - no personal access token required! ✅
+
+---
+_Posted automatically by GitHub Actions bot_"
+          
+          # Post comment
+          RESPONSE=$(curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
+            -d "$(echo "$COMMENT" | jq -R -s '{"body": .}')" \
+            -w "\n%{http_code}")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          
+          if [ "$HTTP_CODE" = "201" ]; then
+            echo "✅ SUCCESS: Comment added to PR #$PR_NUMBER"
+            echo "🔗 View: https://github.com/${{ github.repository }}/pull/$PR_NUMBER"
+          else
+            echo "❌ FAILED: HTTP $HTTP_CODE"
+            echo "Response: $(echo "$RESPONSE" | head -n -1)"
+            exit 1
+          fi
