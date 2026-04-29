@@ -94,7 +94,7 @@ export default function Home() {
               width={16}
               height={16}
             />
-            Examples
+            Examples - 30 Apr 2026
           </a>
           <a
             href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
