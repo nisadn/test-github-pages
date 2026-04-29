@@ -14,12 +14,16 @@ runs:
         always-auth: true
         registry-url: https://registry.npmjs.org
         scope: '@traveloka:registry'
+    - name: Get Node version
+      id: node-version
+      shell: bash
+      run: echo "version=$(cat .nvmrc | tr -d '\n')" >> $GITHUB_OUTPUT
     - name: Cache node_modules
       id: cache-node-modules
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: ${{ runner.os }}-node_modules-${{ hashFiles('.nvmrc') }}-${{ hashFiles('**/yarn.lock') }}
+        key: ${{ runner.os }}-node_modules-node${{ steps.node-version.outputs.version }}-${{ hashFiles('**/yarn.lock') }}
     - name: Install dependencies
       shell: bash
       run: yarn install --prefer-offline --frozen-lockfile
