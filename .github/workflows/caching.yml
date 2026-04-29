@@ -15,7 +15,7 @@ jobs:
           # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
           node-version-file: .nvmrc
           cache: "yarn"
-          cache-dependency-path: 'package-lock.json'
+          cache-dependency-path: "yarn.lock"
       - name: Run install
         run: |
           yarn install --frozen-lockfile # will run `yarn install` command
@@ -33,7 +33,7 @@ jobs:
           # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
           node-version-file: .nvmrc
           cache: "yarn"
-          cache-dependency-path: 'package-lock.json'
+          cache-dependency-path: "yarn.lock"
       - name: Run install
         run: |
           yarn install --frozen-lockfile # will run `yarn install` command
