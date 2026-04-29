@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - feat/cache
+
+jobs:
+  caching:
+    name: Caching Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
+          node-version-file: .nvmrc
+          cache: "yarn"
+      - name: Run install
+        run: |
+          yarn install --frozen-lockfile # will run `yarn install` command
