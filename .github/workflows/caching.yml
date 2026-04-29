@@ -11,12 +11,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v6
-        with:
-          # File containing the version Spec of the version to use.  Examples: package.json, .nvmrc, .node-version, .tool-versions.
-          node-version-file: .nvmrc
-          cache: "yarn"
+      - uses: ./.github/actions/setup
+        # with:
+        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Cache Next.js build
         uses: actions/cache@v4
         with:
@@ -27,9 +24,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}-
             ${{ runner.os }}-nextjs-
-      - name: Run install
-        run: |
-          yarn install --frozen-lockfile --prefer-offline # will run `yarn install` command
       - name: Run build
         run: |
           yarn build
