@@ -1,8 +1,6 @@
 name: Caching
 on:
-  push:
-    branches:
-      - feat/cache-cleanup
+  workflow_dispatch:
 
 jobs:
   caching:
