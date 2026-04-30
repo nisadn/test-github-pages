@@ -1,11 +1,11 @@
-name: "Setup Node.js & Install Dependencies"
+name: 'Setup Node.js & Install Dependencies'
 # inputs:
-# NODE_AUTH_TOKEN:
-#   description: 'Token that has rights to install traveloka dependencies'
-#   required: true
+  # NODE_AUTH_TOKEN:
+  #   description: 'Token that has rights to install traveloka dependencies'
+  #   required: true
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Get Node version
       id: node-version
@@ -17,6 +17,14 @@ runs:
       with:
         path: node_modules
         key: ${{ runner.os }}-${{ runner.arch }}-node_modules-node${{ steps.node-version.outputs.version }}-${{ hashFiles('**/yarn.lock') }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      with:
+        node-version-file: '.nvmrc'
+        always-auth: true
+        registry-url: https://registry.npmjs.org
+        scope: '@traveloka:registry'
     - name: Install dependencies
       shell: bash
       run: yarn install --prefer-offline --frozen-lockfile
