@@ -3,9 +3,9 @@ run-name: "Publish on merge: #${{ github.event.pull_request.number }}"
 on:
   pull_request:
     types: [closed]
-    branches: [publish-rc-merge]
+    branches: [master]
     paths:
-      - "*.txt"
+      - "README.md"
 
 jobs:
   publish:
