@@ -9,10 +9,17 @@ on:
       - "*.txt"
 
 jobs:
+  echo:
+    name: Check user
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking
+        run: |
+          echo "User ${{ github.event.pull_request.user.login }}"
   publish:
     if: >-
       github.event.pull_request.merged == true &&
-      github.event.pull_request.user.login == 'mocchibot[bot]' &&
+      contains(github.event.pull_request.user.login, '[bot]' &&
       contains(github.event.pull_request.labels.*.name, 'auto-publish')
     runs-on: ubuntu-latest
     outputs:
