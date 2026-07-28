@@ -5,7 +5,7 @@ on:
     types: [closed, labeled]
     branches: [master]
     paths:
-      - "README.md"
+      - "*.txt"
 
 jobs:
   publish:
