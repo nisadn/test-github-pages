@@ -33,7 +33,7 @@ jobs:
           title: "Automated PR"
           commit-message: "Update"
           branch: "publish-rc"
-          base: ${{ github.ref_name }}
+          base: "publish-rc-merge"
           body: |
             <!-- publish:package=accomfe-ui;version=0.0.0 -->
 

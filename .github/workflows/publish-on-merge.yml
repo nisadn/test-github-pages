@@ -3,7 +3,7 @@ run-name: "Publish on merge: #${{ github.event.pull_request.number }}"
 on:
   pull_request:
     types: [closed, labeled]
-    branches: [publish-rc]
+    branches: [publish-rc-merge]
     paths:
       - "*.txt"
 
