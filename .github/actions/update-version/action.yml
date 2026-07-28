@@ -5,5 +5,5 @@ runs:
   using: 'composite'
   steps:
     - name: Create dummy file
-      run: echo "dummy content test" > dummy.txt
+      run: echo "dummy content test 2" > dummy.txt
       shell: bash
