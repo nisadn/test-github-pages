@@ -5,8 +5,7 @@ on:
     types: [closed, labeled]
     branches: [master]
     paths:
-      - "packages/*/package.json"
-      - "packages/*/CHANGELOG.md"
+      - "README.md"
 
 jobs:
   publish:
