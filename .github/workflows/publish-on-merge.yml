@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
-          token: ${{ secrets.ORG_GODWITBOT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
           fetch-tags: true
       - name: Verify package.json version matches PR marker
