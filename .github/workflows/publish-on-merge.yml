@@ -1,0 +1,64 @@
+name: Publish Package (On Merge)
+run-name: "Publish on merge: #${{ github.event.pull_request.number }}"
+on:
+  pull_request:
+    types: [closed, labeled]
+    branches: [master]
+    paths:
+      - "packages/*/package.json"
+      - "packages/*/CHANGELOG.md"
+
+jobs:
+  publish:
+    if: >-
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'auto-publish')
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.parse-pr.outputs.package }}
+      version: ${{ steps.parse-pr.outputs.version }}
+      tag: ${{ steps.parse-pr.outputs.tag }}
+    steps:
+      - name: Parse package/version from PR body
+        id: parse-pr
+        uses: actions/github-script@v7
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        with:
+          script: |
+            const body = process.env.PR_BODY || '';
+            const match = body.match(/<!--\s*publish:package=([^;]+);version=([^\s]+)\s*-->/);
+            if (!match) {
+              core.setFailed('Could not find `<!-- publish:package=X;version=Y -->` marker in PR body.');
+              return;
+            }
+            const [, pkg, version] = match;
+            const tag = `${pkg}@${version}`;
+            console.log(`Parsed package=${pkg} version=${version} tag=${tag}`);
+            core.setOutput('package', pkg);
+            core.setOutput('version', version);
+            core.setOutput('tag', tag);
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          token: ${{ secrets.ORG_GODWITBOT_TOKEN }}
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Verify package.json version matches PR marker
+        uses: actions/github-script@v7
+        env:
+          EXPECTED_PACKAGE: ${{ steps.parse-pr.outputs.package }}
+          EXPECTED_VERSION: ${{ steps.parse-pr.outputs.version }}
+        with:
+          script: |
+            const path = require('path');
+            const { EXPECTED_PACKAGE, EXPECTED_VERSION } = process.env;
+            const pkgPath = path.join(process.cwd(), 'packages', EXPECTED_PACKAGE, 'package.json');
+            const pkg = require(pkgPath);
+            if (pkg.version !== EXPECTED_VERSION) {
+              core.setFailed(
+                `Version mismatch: packages/${EXPECTED_PACKAGE}/package.json has ${pkg.version}, expected ${EXPECTED_VERSION}`
+              );
+              return;
+            }
+            console.log(`OK: ${EXPECTED_PACKAGE}@${pkg.version} matches PR marker.`);

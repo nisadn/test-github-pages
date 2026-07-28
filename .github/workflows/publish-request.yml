@@ -34,3 +34,7 @@ jobs:
           commit-message: "Update"
           branch: "publish-rc"
           base: ${{ github.ref_name }}
+          body: |
+            <!-- publish:package=accomfe-ui;version=0.0.0 -->
+
+            **Do not remove the HTML comment above** — it is used to detect which package/version to publish.
