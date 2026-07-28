@@ -3,7 +3,7 @@ name: "[Testing] Request to Publish"
 on:
   push:
     branches:
-      - testing/push
+      - test/push-label
 
 jobs:
   create-pull-request:
@@ -34,3 +34,4 @@ jobs:
           commit-message: "Update"
           branch: "publish-rc"
           base: ${{ github.ref_name }}
+          labels: auto-publish
