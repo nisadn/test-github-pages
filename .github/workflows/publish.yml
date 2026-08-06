@@ -52,8 +52,7 @@ jobs:
     needs: get-latest-tag
     if: ${{ github.event.inputs.package == 'accomfe-ui' }}
     with:
-      ref_type: tags
-      checkout_ref: ${{ needs.get-latest-tag.outputs.tag }}
+      ref: ${{ needs.get-latest-tag.outputs.tag }}
     permissions:
       contents: read
       pages: write
