@@ -7,8 +7,8 @@ on:
         description: "Count of branches to retain"
         type: number
         default: 10
-  schedule:
-    - cron: '15 4 * * *'
+  # schedule:
+  #   - cron: '15 4 * * *'
   
 jobs:
   need-approval:

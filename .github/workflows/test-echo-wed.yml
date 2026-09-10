@@ -1,8 +1,8 @@
 name: Test Echo Wednesday
 
 on:
-  schedule:
-    - cron: '30 9 */32,22-28 * 3'
+  # schedule:
+  #   - cron: '30 9 */32,22-28 * 3'
 
 
 jobs:
