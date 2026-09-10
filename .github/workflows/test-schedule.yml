@@ -33,6 +33,8 @@ jobs:
           echo "github.event_name != 'schedule' = ${{ github.event_name != 'schedule' }}"
           echo "github.event_name == 'schedule' = ${{ github.event_name == 'schedule' }}"
           echo "in_window (from check_schedule_window) = ${{ needs.check_schedule_window.outputs.in_window }}"
+          echo "in_window == 'true'  = ${{ needs.check_schedule_window.outputs.in_window == 'true' }}"
+          echo "in_window == 'false' = ${{ needs.check_schedule_window.outputs.in_window == 'false' }}"
           echo "now (UTC) = $(date -u)"
           echo "::group::github.event payload"
           cat <<'EOF'
